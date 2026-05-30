@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://r8781d0ugdiu"]
+
+[ext_resource type="Script" uid="uid://0lm2k1t0pviv" path="res://Evar system 000/E-Fc.gd" id="1_75ncw"]
+[ext_resource type="Texture2D" uid="uid://b2xgs5mwyikvc" path="res://MacionTyurma-MD/MATERIALES/none marca.png" id="2_6p8jo"]
+
+[node name="Eev" type="Node2D" unique_id=175277499]
+script = ExtResource("1_75ncw")
+
+[node name="NoneMarca" type="Sprite2D" parent="." unique_id=2031446885]
+texture = ExtResource("2_6p8jo")

@@ -1,8 +1,9 @@
+@tool
 extends Resource
 class_name d_tg
 
 @export_multiline var                                 rrinfo:=""##información
-@export_multiline var                                 cllloz:=""##resumen de targeta
+@export var                                           cllloz:=""##resumen de targeta
 @export_enum("0","1","9","A","M","E","Q","R","L") var tiprrh:=""##formatos de tarjeta
 @export var                                           RR:={}    ##extras
 
@@ -164,47 +165,47 @@ func fmtg():                   # formato de tarjeta
 		rrinfo+="Repetisiones: "+str(RR["timlim"])+"\n"
 	if "activa" in RR:
 		var tl=19
-		if   RR["activa"]%tl==0:rrinfo+="actibasion: 0=[P_]=pasiba\n"
-		elif RR["activa"]%tl==1:rrinfo+="actibasion: 1=[M.]=paso\n"
-		elif RR["activa"]%tl==2:rrinfo+="actibasion: 2=[M+]=marcha\n"
-		elif RR["activa"]%tl==3:rrinfo+="actibasion: 3=[M*]=pateada\n"
-		elif RR["activa"]%tl==4:rrinfo+="actibasion: 4=[N.]=paso atras\n"
-		elif RR["activa"]%tl==5:rrinfo+="actibasion: 5=[N+]=retroseder\n"
-		elif RR["activa"]%tl==6:rrinfo+="actibasion: 6=[N*]=distansiar\n"
-		elif RR["activa"]%tl==7:rrinfo+="actibasion: 7=[I.]=topar\n"
-		elif RR["activa"]%tl==8:rrinfo+="actibasion: 8=[I+]=interactuar\n"
-		elif RR["activa"]%tl==9:rrinfo+="actibasion: 9=[I*]=reaccion\n"
-		elif RR["activa"]%tl==10:rrinfo+="actibasion: 10=[C.]=salto\n"
-		elif RR["activa"]%tl==11:rrinfo+="actibasion: 11=[C+]=cloche\n"
-		elif RR["activa"]%tl==12:rrinfo+="actibasion: 12=[C*]=cambio\n"
-		elif RR["activa"]%tl==13:rrinfo+="actibasion: 13=[X.]=tope x\n"
-		elif RR["activa"]%tl==14:rrinfo+="actibasion: 14=[X+]=interaccion x\n"
-		elif RR["activa"]%tl==15:rrinfo+="actibasion: 15=[X*]=reaccion x\n"
-		elif RR["activa"]%tl==16:rrinfo+="actibasion: 16=[Z.]=tope z\n"
-		elif RR["activa"]%tl==17:rrinfo+="actibasion: 17=[Z+]=interaccion z\n"
-		elif RR["activa"]%tl==18:rrinfo+="actibasion: 18=[Z*]=reaccion z\n"
+		if   RR["activa"]%tl==0:rrinfo+="actibasion : 0=[P_]=pasiba\n"
+		elif RR["activa"]%tl==1:rrinfo+="actibasion : 1=[M.]=paso\n"
+		elif RR["activa"]%tl==2:rrinfo+="actibasion : 2=[M+]=marcha\n"
+		elif RR["activa"]%tl==3:rrinfo+="actibasion : 3=[M*]=pateada\n"
+		elif RR["activa"]%tl==4:rrinfo+="actibasion : 4=[N.]=paso atras\n"
+		elif RR["activa"]%tl==5:rrinfo+="actibasion : 5=[N+]=retroseder\n"
+		elif RR["activa"]%tl==6:rrinfo+="actibasion : 6=[N*]=distansiar\n"
+		elif RR["activa"]%tl==7:rrinfo+="actibasion : 7=[I.]=topar\n"
+		elif RR["activa"]%tl==8:rrinfo+="actibasion : 8=[I+]=interactuar\n"
+		elif RR["activa"]%tl==9:rrinfo+="actibasion : 9=[I*]=reaccion\n"
+		elif RR["activa"]%tl==10:rrinfo+="actibasion : 10=[C.]=salto\n"
+		elif RR["activa"]%tl==11:rrinfo+="actibasion : 11=[C+]=cloche\n"
+		elif RR["activa"]%tl==12:rrinfo+="actibasion : 12=[C*]=cambio\n"
+		elif RR["activa"]%tl==13:rrinfo+="actibasion : 13=[X.]=tope x\n"
+		elif RR["activa"]%tl==14:rrinfo+="actibasion : 14=[X+]=interaccion x\n"
+		elif RR["activa"]%tl==15:rrinfo+="actibasion : 15=[X*]=reaccion x\n"
+		elif RR["activa"]%tl==16:rrinfo+="actibasion : 16=[Z.]=tope z\n"
+		elif RR["activa"]%tl==17:rrinfo+="actibasion : 17=[Z+]=interaccion z\n"
+		elif RR["activa"]%tl==18:rrinfo+="actibasion : 18=[Z*]=reaccion z\n"
 		if RR["activa"]>=tl:RR["activa"]=0
 	if "activ2" in RR:
 		var tl=19
-		if   RR["activ2"]%tl==0:rrinfo+="actibasion: 0=[P_]=pasiba\n"
-		elif RR["activ2"]%tl==1:rrinfo+="actibasion: 1=[M.]=paso\n"
-		elif RR["activ2"]%tl==2:rrinfo+="actibasion: 2=[M+]=marcha\n"
-		elif RR["activ2"]%tl==3:rrinfo+="actibasion: 3=[M*]=pateada\n"
-		elif RR["activ2"]%tl==4:rrinfo+="actibasion: 4=[N.]=paso atras\n"
-		elif RR["activ2"]%tl==5:rrinfo+="actibasion: 5=[N+]=retroseder\n"
-		elif RR["activ2"]%tl==6:rrinfo+="actibasion: 6=[N*]=distansiar\n"
-		elif RR["activ2"]%tl==7:rrinfo+="actibasion: 7=[I.]=topar\n"
-		elif RR["activ2"]%tl==8:rrinfo+="actibasion: 8=[I+]=interactuar\n"
-		elif RR["activ2"]%tl==9:rrinfo+="actibasion: 9=[I*]=reaccion\n"
-		elif RR["activ2"]%tl==10:rrinfo+="actibasion: 10=[C.]=salto\n"
-		elif RR["activ2"]%tl==11:rrinfo+="actibasion: 11=[C+]=cloche\n"
-		elif RR["activ2"]%tl==12:rrinfo+="actibasion: 12=[C*]=cambio\n"
-		elif RR["activ2"]%tl==13:rrinfo+="actibasion: 13=[X.]=tope x\n"
-		elif RR["activ2"]%tl==14:rrinfo+="actibasion: 14=[X+]=interaccion x\n"
-		elif RR["activ2"]%tl==15:rrinfo+="actibasion: 15=[X*]=reaccion x\n"
-		elif RR["activ2"]%tl==16:rrinfo+="actibasion: 16=[Z.]=tope z\n"
-		elif RR["activ2"]%tl==17:rrinfo+="actibasion: 17=[Z+]=interaccion z\n"
-		elif RR["activ2"]%tl==18:rrinfo+="actibasion: 18=[Z*]=reaccion z\n"
+		if   RR["activ2"]%tl==0:rrinfo+="actibasion2: 0=[P_]=pasiba\n"
+		elif RR["activ2"]%tl==1:rrinfo+="actibasion2: 1=[M.]=paso\n"
+		elif RR["activ2"]%tl==2:rrinfo+="actibasion2: 2=[M+]=marcha\n"
+		elif RR["activ2"]%tl==3:rrinfo+="actibasion2: 3=[M*]=pateada\n"
+		elif RR["activ2"]%tl==4:rrinfo+="actibasion2: 4=[N.]=paso atras\n"
+		elif RR["activ2"]%tl==5:rrinfo+="actibasion2: 5=[N+]=retroseder\n"
+		elif RR["activ2"]%tl==6:rrinfo+="actibasion2: 6=[N*]=distansiar\n"
+		elif RR["activ2"]%tl==7:rrinfo+="actibasion2: 7=[I.]=topar\n"
+		elif RR["activ2"]%tl==8:rrinfo+="actibasion2: 8=[I+]=interactuar\n"
+		elif RR["activ2"]%tl==9:rrinfo+="actibasion2: 9=[I*]=reaccion\n"
+		elif RR["activ2"]%tl==10:rrinfo+="actibasion2: 10=[C.]=salto\n"
+		elif RR["activ2"]%tl==11:rrinfo+="actibasion2: 11=[C+]=cloche\n"
+		elif RR["activ2"]%tl==12:rrinfo+="actibasion2: 12=[C*]=cambio\n"
+		elif RR["activ2"]%tl==13:rrinfo+="actibasion2: 13=[X.]=tope x\n"
+		elif RR["activ2"]%tl==14:rrinfo+="actibasion2: 14=[X+]=interaccion x\n"
+		elif RR["activ2"]%tl==15:rrinfo+="actibasion2: 15=[X*]=reaccion x\n"
+		elif RR["activ2"]%tl==16:rrinfo+="actibasion2: 16=[Z.]=tope z\n"
+		elif RR["activ2"]%tl==17:rrinfo+="actibasion2: 17=[Z+]=interaccion z\n"
+		elif RR["activ2"]%tl==18:rrinfo+="actibasion2: 18=[Z*]=reaccion z\n"
 		if RR["activ2"]>=tl:RR["activ2"]=0
 	if "condii" in RR:
 		var tl=4
@@ -215,30 +216,30 @@ func fmtg():                   # formato de tarjeta
 		if RR["condii"]>=tl:RR["condii"]=0
 	if "lin_og" in RR:
 		var tl=10
-		if   RR["lin_og"]%tl==0:rrinfo+="Funsion: 0=mover\n"
-		elif RR["lin_og"]%tl==1:rrinfo+="Funsion: 1=orientar x\n"
-		elif RR["lin_og"]%tl==2:rrinfo+="Funsion: 2=orientar y\n"
-		elif RR["lin_og"]%tl==3:rrinfo+="Funsion: 3=dash xx\n"
-		elif RR["lin_og"]%tl==4:rrinfo+="Funsion: 4=esalto +y\n"
-		elif RR["lin_og"]%tl==5:rrinfo+="Funsion: 5=en picada -y\n"
-		elif RR["lin_og"]%tl==6:rrinfo+="Funsion: 6=escalar\n"
-		elif RR["lin_og"]%tl==7:rrinfo+="Funsion: 7=recuperacion\n"
-		elif RR["lin_og"]%tl==8:rrinfo+="Funsion: 8=divagar\n"
-		elif RR["lin_og"]%tl==9:rrinfo+="Funsion: 9=agarrar\n"
+		if   RR["lin_og"]%tl==0:rrinfo+="Funsion : 0=mover\n"
+		elif RR["lin_og"]%tl==1:rrinfo+="Funsion : 1=orientar x\n"
+		elif RR["lin_og"]%tl==2:rrinfo+="Funsion : 2=orientar y\n"
+		elif RR["lin_og"]%tl==3:rrinfo+="Funsion : 3=dash xx\n"
+		elif RR["lin_og"]%tl==4:rrinfo+="Funsion : 4=esalto +y\n"
+		elif RR["lin_og"]%tl==5:rrinfo+="Funsion : 5=en picada -y\n"
+		elif RR["lin_og"]%tl==6:rrinfo+="Funsion : 6=escalar\n"
+		elif RR["lin_og"]%tl==7:rrinfo+="Funsion : 7=recuperacion\n"
+		elif RR["lin_og"]%tl==8:rrinfo+="Funsion : 8=divagar\n"
+		elif RR["lin_og"]%tl==9:rrinfo+="Funsion : 9=agarrar\n"
 		if RR["lin_og"]>=tl:RR["lin_og"]=0
 	if "lin_o2" in RR:
 		var tl=11
-		if   RR["lin_o2"]%tl==0:rrinfo+="Funsion: 0=ninguna\n"
-		elif RR["lin_o2"]%tl==1:rrinfo+="Funsion: 1=mover\n"
-		elif RR["lin_o2"]%tl==2:rrinfo+="Funsion: 2=orientar x\n"
-		elif RR["lin_o2"]%tl==3:rrinfo+="Funsion: 3=orientar y\n"
-		elif RR["lin_o2"]%tl==4:rrinfo+="Funsion: 4=dash xx\n"
-		elif RR["lin_o2"]%tl==5:rrinfo+="Funsion: 5=esalto +y\n"
-		elif RR["lin_o2"]%tl==6:rrinfo+="Funsion: 6=en picada -y\n"
-		elif RR["lin_o2"]%tl==7:rrinfo+="Funsion: 7=escalar\n"
-		elif RR["lin_o2"]%tl==8:rrinfo+="Funsion: 8=recuperacion\n"
-		elif RR["lin_o2"]%tl==9:rrinfo+="Funsion: 9=divagar\n"
-		elif RR["lin_o2"]%tl==10:rrinfo+="Funsion: 10=agarrar\n"
+		if   RR["lin_o2"]%tl==0:rrinfo+="Funsion2: 0=ninguna\n"
+		elif RR["lin_o2"]%tl==1:rrinfo+="Funsion2: 1=mover\n"
+		elif RR["lin_o2"]%tl==2:rrinfo+="Funsion2: 2=orientar x\n"
+		elif RR["lin_o2"]%tl==3:rrinfo+="Funsion2: 3=orientar y\n"
+		elif RR["lin_o2"]%tl==4:rrinfo+="Funsion2: 4=dash xx\n"
+		elif RR["lin_o2"]%tl==5:rrinfo+="Funsion2: 5=esalto +y\n"
+		elif RR["lin_o2"]%tl==6:rrinfo+="Funsion2: 6=en picada -y\n"
+		elif RR["lin_o2"]%tl==7:rrinfo+="Funsion2: 7=escalar\n"
+		elif RR["lin_o2"]%tl==8:rrinfo+="Funsion2: 8=recuperacion\n"
+		elif RR["lin_o2"]%tl==9:rrinfo+="Funsion2: 9=divagar\n"
+		elif RR["lin_o2"]%tl==10:rrinfo+="Funsion2: 10=agarrar\n"
 		if RR["lin_o2"]>=tl:RR["lin_o2"]=0
 	if "activv" in RR:
 		var tl=27

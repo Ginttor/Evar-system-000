@@ -172,7 +172,7 @@ func atlz(E,x):                 # atlas
 					ap=true;break
 	if ap:
 		E.enbolt[x].defn()
-		var f=preload("res://Evar system 000/rqs/eev.tscn").instantiate()
+		var f=preload("res://Evar_system_000/rqs/eev.tscn").instantiate()
 		E.add_child.call_deferred(f)
 		var uv=EgLb.dado(0,len(E.puntuv))
 		f.ddd_tg=E.enbolt[x]
@@ -207,7 +207,7 @@ func tabl(E,s):                 # marcasion de tablero
 		if len(E.R["TTb"])!=len(E.puntuv):
 			E.R["TTb"]=[]
 			var x=0;while x<len(E.puntuv):
-				var f=preload("res://Evar system 000/rqs/p.tscn").instantiate()
+				var f=preload("res://Evar_system_000/rqs/p.tscn").instantiate()
 				E.add_child.call_deferred(f)
 				EgLb.poci(f,x,E)
 				E.R["TTb"].append(f)
@@ -237,7 +237,7 @@ func aspe(E,oj=null,t="",tx=""):# aspecto de la interfase
 		while x<len(E.ioenje.ddd_tg):
 			E.R["IV"][x].visible=false
 			E.R["IV"][x].aspect[0].texture=null
-			E.R["IV"][x].aspect[0].texture=load(E.ioenje.ddd_tg[x].RR["imagen"])
+			#E.R["IV"][x].aspect[0].texture=load(E.ioenje.ddd_tg[x].RR["imagen"])
 			E.R["IV"][x].visible=true
 			#-----------------------
 			#if E.ioenje.R["lQ"][x]!=-1:

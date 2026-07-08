@@ -3,28 +3,7 @@
 @export var est_ig:=""          ##estado en juego
 @export var ddd_tg:Array[d_tg]  ##targeta de pieza
 @export var etiggg:Array[String]##etiquetas
-@export var AA:={               ##animasiones
-	"P_": null,##parado
-	"M.": null,##avanzar
-	"M+": null,##avanzar
-	"M*": null,##avanzar
-	"N.": null,##retroseder
-	"N+": null,##retroseder
-	"N*": null,##retroseder
-	"I.": null,##interaccion
-	"I+": null,##interaccion
-	"I*": null,##interaccion
-	"C.": null,##cloche
-	"C+": null,##cloche
-	"C*": null,##cloche
-	"X.": null,##accion x
-	"X+": null,##accion x
-	"X*": null,##accion x
-	"Z.": null,##accion z
-	"Z+": null,##accion z
-	"Z*": null,##accion z
-	}
-@export var RR:={}              ##extras
+const AA_LBL:=["P_","M.","M+","M*","N.","N+","N*","I.","I+","I*","C.","C+","C*","X.","X+","X*","Z.","Z+","Z*"]##etiquetas de animasion (equibalen a RR["activa"]%19)
 ##estadisticas de carga[br]
 ##"Vel" = velocidad maxima[br]
 ##"Mac" = acelerasion maxima[br]
@@ -34,23 +13,28 @@
 ##"Sti" = stabilidad[br]
 ##"Sps" = espasio[br]
 @export var io_0SC:={
-	"Vel": 0,#velocidad maxima
-	"Mac": 0,#acelerasion maxima
-	"Acl": 0,#aselerasion
-	"Pot": 0,#potencia
-	"Mas": 0,#masa
-	"Sti": 0,#stabilidad
-	"Sps": 0,#espasio
+	"Vel": 10,#velocidad maxima
+	"Mac": 1,#acelerasion maxima
+	"Acl": 10,#aselerasion
+	"Pot": 10,#potencia
+	"Mas": 1,#masa
+	"Sti": 1,#stabilidad
+	"Sps": 1,#espasio
 	}
+@export var RR:={}              ##extras, RR["AA"]=animasiones armadas desde ddd_tg (tiprrh=="M")
 @export var PT:Array[Node]##binculado
 var R:={"id":["pz",0]}
 
 func _ready() -> void:
+	if !"AA" in RR:RR["AA"]={}
+	for i in ddd_tg:
+		i.defn()
+		i.fmtg()
+		if i.tiprrh=="M":RR["AA"][AA_LBL[i.RR["activa"]%len(AA_LBL)]]=i
 	if Engine.is_editor_hint():
 		sttr($".")
 	else:
 		if len(ddd_tg)>0:
-			ddd_tg[0].defn()
 			etiggg.append(ddd_tg[0].resource_name)
 		if !"II" in R:R["II"]=[]
 		if !"YY" in R:R["YY"]=[]
@@ -60,7 +44,8 @@ func _ready() -> void:
 		for i in ddd_tg:print(i.tiprrh)
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
-		pass
+		for i in ddd_tg:
+			i.fmtg()
 	else:
 		if est_ig=="":$".".visible=false
 		else:$".".visible=true
@@ -79,7 +64,7 @@ func _physics_process(_delta: float) -> void:
 #========================
 func motr(E):                   # motor
 	if "BP" in E.R and "KM" in E.R:
-		if "DV" in E.AA:
+		if "DV" in E.RR["AA"]:
 			var el=EgLb.dado(0,69,96)
 			if el==0:
 				var y=0;while y < len(E.R["KM"]):
@@ -100,36 +85,36 @@ func motr(E):                   # motor
 		elif E.R["KM"][4]=="a":ej="C+"
 		elif E.R["KM"][4]=="k":ej="C*"
 		#---
-		if E.AA[ej]:
-			if E.AA[ej].RR["lin_og"]==0 or E.AA[ej].RR["lin_o2"]==1:#-----------------------------------------#caminar
+		if ej in E.RR["AA"] and  E.RR["AA"][ej]:
+			if E.RR["AA"][ej].RR["lin_og"]==0 or E.RR["AA"][ej].RR["lin_o2"]==1:#-----------------------------------------#caminar
 				if   E.R["KM"][0]!="." and E.velocity.y>-E.io_0SC["Vel"]:E.R["FF"][0].y=-E.io_0SC["Acl"]
 				elif E.R["KM"][1]!="." and E.velocity.y< E.io_0SC["Vel"]:E.R["FF"][0].y= E.io_0SC["Acl"]
 				if   E.R["KM"][2]!="." and E.velocity.x< E.io_0SC["Vel"]:E.R["FF"][0].x= E.io_0SC["Acl"]
 				elif E.R["KM"][3]!="." and E.velocity.x>-E.io_0SC["Vel"]:E.R["FF"][0].x=-E.io_0SC["Acl"]
 				EgLb.stcM(E,2,true)
-				if "a" in E.R and E.AA[ej].RR["acionn"]!="AA":E.PT[E.R["a"]].play(E.AA[ej].RR["acionn"])
-			if E.AA[ej].RR["lin_og"]==1 or E.AA[ej].RR["lin_o2"]==2:#-----------------------------------------#rotar x
+				if "a" in E.R and E.RR["AA"][ej].RR["acionn"]!="AA":E.PT[E.R["a"]].play(E.RR["AA"][ej].RR["acionn"])
+			if E.RR["AA"][ej].RR["lin_og"]==1 or E.RR["AA"][ej].RR["lin_o2"]==2:#-----------------------------------------#rotar x
 				if   E.R["KM"][2]!=".":E.PT[E.R["BP"]].scale.x= 1
 				elif E.R["KM"][3]!=".":E.PT[E.R["BP"]].scale.x=-1
-				if "a" in E.R and E.AA[ej].RR["acionn"]!="AA":E.PT[E.R["a"]].play(E.AA[ej].RR["acionn"])
-			if E.AA[ej].RR["lin_og"]==3 or E.AA[ej].RR["lin_o2"]==3:#-----------------------------------------#dash
+				if "a" in E.R and E.RR["AA"][ej].RR["acionn"]!="AA":E.PT[E.R["a"]].play(E.RR["AA"][ej].RR["acionn"])
+			if E.RR["AA"][ej].RR["lin_og"]==3 or E.RR["AA"][ej].RR["lin_o2"]==3:#-----------------------------------------#dash
 				if   E.R["KM"][0]!="." and E.velocity.y>-E.io_0SC["Vel"]:E.R["FF"][0].y=-E.io_0SC["Pot"]*2
 				elif E.R["KM"][1]!="." and E.velocity.y< E.io_0SC["Vel"]:E.R["FF"][0].y= E.io_0SC["Pot"]*2
 				if   E.R["KM"][2]!="." and E.velocity.x< E.io_0SC["Vel"]:E.R["FF"][0].x= E.io_0SC["Pot"]*2
 				elif E.R["KM"][3]!="." and E.velocity.x>-E.io_0SC["Vel"]:E.R["FF"][0].x=-E.io_0SC["Pot"]*2
-				if "a" in E.R and E.AA[ej].RR["acionn"]!="AA":E.PT[E.R["a"]].play(E.AA[ej].RR["acionn"])
-			if E.AA[ej].RR["lin_og"]==4 or E.AA[ej].RR["lin_o2"]==5:#-----------------------------------------#salto
+				if "a" in E.R and E.RR["AA"][ej].RR["acionn"]!="AA":E.PT[E.R["a"]].play(E.RR["AA"][ej].RR["acionn"])
+			if E.RR["AA"][ej].RR["lin_og"]==4 or E.RR["AA"][ej].RR["lin_o2"]==5:#-----------------------------------------#salto
 				if E.R["M"][0].count("f"):
 					E.velocity.y=-(E.io_0SC["Pot"]+E.io_0SC["Mas"])*30
-					if "a" in E.R and E.AA[ej].RR["acionn"]!="AA":E.PT[E.R["a"]].play(E.AA[ej].RR["acionn"])
+					if "a" in E.R and E.RR["AA"][ej].RR["acionn"]!="AA":E.PT[E.R["a"]].play(E.RR["AA"][ej].RR["acionn"])
 					EgLb.stcM(E,2,false)
-			if E.AA[ej].RR["lin_og"]==6 or E.AA[ej].RR["lin_o2"]==7 and E.R["fp"]:#---------------------------#escalar
+			if E.RR["AA"][ej].RR["lin_og"]==6 or E.RR["AA"][ej].RR["lin_o2"]==7 and E.R["fp"]:#---------------------------#escalar
 				E.velocity.y=-E.io_0SC["Vel"]
 				E.R["FF"][0].y=0
-				if "a" in E.R and E.AA[ej].RR["acionn"]!="AA":E.PT[E.R["a"]].play(E.AA[ej].RR["acionn"])
+				if "a" in E.R and E.RR["AA"][ej].RR["acionn"]!="AA":E.PT[E.R["a"]].play(E.RR["AA"][ej].RR["acionn"])
 				EgLb.stcM(E,2,false)
 			if ej=="P_":
-				if "a" in E.R and E.AA[ej].RR["acionn"]!="AA":E.PT[E.R["a"]].play(E.AA[ej].RR["acionn"])
+				if "a" in E.R and E.RR["AA"][ej].RR["acionn"]!="AA":E.PT[E.R["a"]].play(E.RR["AA"][ej].RR["acionn"])
 				EgLb.stcM($".",2,true)
 	if "BP" in E.R and E.PT[E.R["BP"]].position.x!=0:
 		if   E.PT[E.R["BP"]].position.x<0 and E.R["FF"][0].x>0:E.R["FF"][0].x=0
@@ -177,9 +162,9 @@ func sttr(E):                   # estructurar
 		if E.PT[x].name=="i":EgLb.stcL(E.PT[x],1, false);EgLb.stcM(E.PT[x],1, true);EgLb.stcM(E.PT[x],4, true)
 		if E.PT[x].name=="AA"  :
 			E.R["a"]=x
-			if E.ddd_tg and !"M" in E.AA:E.AA["M"]=null
+			if E.ddd_tg and !"M" in E.RR["AA"]:E.RR["AA"]["M"]=null
 		#if E.script==load("res://Evar system 000/E-Pz.gd"):
-		if "SK" in E.AA:E.R["fp"]=false
+		if "SK" in E.RR["AA"]:E.R["fp"]=false
 		if E.io_0SC["Sps"]>0:
 			if "IV" in E.RR:
 				E.R["Dm"]=[-1] #en lamno del dedo

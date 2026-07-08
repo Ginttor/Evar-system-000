@@ -1,10 +1,11 @@
 [gd_scene format=3 uid="uid://duvwdipiqehpk"]
 
-[ext_resource type="Texture2D" uid="uid://b54fofsuuksgk" path="res://icon.svg" id="1_jh65p"]
+[ext_resource type="Texture2D" uid="uid://doxf1oicp3r3k" path="res://Evar system 000/rqs/p.png" id="1_f2pux"]
 
 [node name="P" type="Node2D" unique_id=530151749]
+scale = Vector2(92, 92)
 
 [node name="Icon" type="Sprite2D" parent="." unique_id=760466540]
 modulate = Color(1, 1, 1, 0.29803923)
 z_index = 100
-texture = ExtResource("1_jh65p")
+texture = ExtResource("1_f2pux")

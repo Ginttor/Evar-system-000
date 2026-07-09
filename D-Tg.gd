@@ -1,3 +1,18 @@
+#Copyright 2026 Evaristo Velasquez
+#
+#Licensed under the Apache License, Version 2.0 (the "License");
+#you may not use this file except in compliance with the License.
+#You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#Unless required by applicable law or agreed to in writing, software
+#distributed under the License is distributed on an "AS IS" BASIS,
+#WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#See the License for the specific language governing permissions and
+#limitations under the License.
+
+
 @tool
 extends Resource
 class_name d_tg
@@ -11,7 +26,7 @@ class_name d_tg
 func fmtg():                   # formato de tarjeta
 	if   tiprrh=="0":
 		if !"estrus" in RR:RR["estrus"]=0                                                  #iestructura de esensia
-		if !"imagen" in RR:RR["imagen"]="res://Evar system 000/rqs/p.png"                  #imagen de referensia
+		if !"imagen" in RR:RR["imagen"]="res://Evar_system_000/rqs/p.png"                  #imagen de referensia
 		if !"descri" in RR:RR["descri"]="..."                                              #descripsion
 		if !"lem_ak" in RR:RR["lem_ak"]={"0": 0,"A": 0,"M": 0,"E": 0,"Q": 0,"R": 0,"L": 0,}#limite de acumulasiones
 		if !"fin_es" in RR:RR["fin_es"]="//Pz"                                             #forma fisica

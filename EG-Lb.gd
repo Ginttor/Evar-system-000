@@ -1,3 +1,18 @@
+#Copyright 2026 Evaristo Velasquez
+#
+#Licensed under the Apache License, Version 2.0 (the "License");
+#you may not use this file except in compliance with the License.
+#You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#Unless required by applicable law or agreed to in writing, software
+#distributed under the License is distributed on an "AS IS" BASIS,
+#WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#See the License for the specific language governing permissions and
+#limitations under the License.
+
+
 @tool extends Node
 
 @export var dt:d_tg                          ##direccion de targeta
@@ -190,28 +205,6 @@ func stcL(E,l: int, e: bool):   # cambiar colision layer
 		E.collision_layer |= (1 << (l - 1))
 	else:
 		E.collision_layer &= ~(1 << (l - 1))
-func tabl(E,s):                 # marcasion de tablero
-	if s:
-		if "Tg" in E.RR and E.RR["Tg"]==null:
-			E.RR["TN"]=Vector3i(0,1,0)
-		if !E.focodc:E.focodc=$"."
-		if !"F" in E.mallat:E.mallat["F"]=false
-		if len(E.puntuv)==0:
-			var p=E.mallat["P"]
-			while p.x>=E.mallat["N"].x:
-				p.y=E.mallat["P"].y
-				while p.y<=E.mallat["N"].y:
-					E.puntuv.append("("+str(p.x)+","+str(p.y)+");LV;")
-					p.y+=1
-				p.x-=1
-		if len(E.R["TTb"])!=len(E.puntuv):
-			E.R["TTb"]=[]
-			var x=0;while x<len(E.puntuv):
-				var f=preload("res://Evar_system_000/rqs/p.tscn").instantiate()
-				E.add_child.call_deferred(f)
-				EgLb.poci(f,x,E)
-				E.R["TTb"].append(f)
-				x+=1
 func poci(p,uv,E):              # posisionamiento de pieza
 	var xy=(E.puntuv[uv].split(";")[0].replace("(","").replace(")","")).split(",")
 	p.global_position.x=(int(xy[0])*E.escall.x)+E.global_position.x
@@ -233,12 +226,12 @@ func aspe(E,oj=null,t="",tx=""):# aspecto de la interfase
 			E.R["IV"][x].visible=false
 			E.R["IV"][x].aspect[0].texture=null
 			x+=1
-		x=0
-		while x<len(E.ioenje.ddd_tg):
-			E.R["IV"][x].visible=false
-			E.R["IV"][x].aspect[0].texture=null
-			#E.R["IV"][x].aspect[0].texture=load(E.ioenje.ddd_tg[x].RR["imagen"])
-			E.R["IV"][x].visible=true
+		x=1
+		while x<len(E.ioenje.RR["i0"]):
+			E.R["IV"][x-1].visible=false
+			E.R["IV"][x-1].aspect[0].texture=null
+			E.R["IV"][x-1].aspect[0].texture=load(E.ioenje.RR["i0"][x].RR["imagen"])
+			E.R["IV"][x-1].visible=true
 			#-----------------------
 			#if E.ioenje.R["lQ"][x]!=-1:
 			#	if E.ioenje.RR["IV"]["K"][E.ioenje.R["lQ"][x]]=="":

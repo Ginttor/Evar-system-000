@@ -1,3 +1,18 @@
+#Copyright 2026 Evaristo Velasquez
+#
+#Licensed under the Apache License, Version 2.0 (the "License");
+#you may not use this file except in compliance with the License.
+#You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#Unless required by applicable law or agreed to in writing, software
+#distributed under the License is distributed on an "AS IS" BASIS,
+#WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#See the License for the specific language governing permissions and
+#limitations under the License.
+
+
 @tool extends Node
 
 @export var ddd_tg:d_tg            ##targeta de entidad
@@ -11,12 +26,6 @@
 @export_group("Mapeado")
 @export var focodc:Node            ##foco de la camara para sentrarse
 @export var spcmap:Node            ##mapa espesial
-@export var mallat:Dictionary={    ##malla de tablero
-	"P":Vector2i(0,0),
-	"N":Vector2i(0,0),
-	}
-@export var puntuv:Array[String]   ##(0,0):IF:0/1
-@export var escall:=Vector2i(0,0)  ##escalado de temaño
 @export var acctib:Array[d_tg]=[null]##eventos activos
 @export var PT:Array[Node]         ##binculado
 @export_group("Emboltorio")
@@ -25,11 +34,10 @@
 @export var reppem:Array[int]      ##repetisiones de targetas
 @export var RR:={}                 ##extras
 
-var R:={"TTb":[]}
+var R:={"id":["tb",0]}
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
-		EgLb.tabl($".",true)
 		var x=0
 		while x<len(PT):
 			PT[x].RR["Md"]=$"."
@@ -46,7 +54,6 @@ func _ready() -> void:
 			if i>0:
 				rt+=i
 		print("!!--Reserva: ",rt,"/",recerv.z)
-		EgLb.tabl($".",false)
 		if len(enbolt)>0:RR["EV"]=[]
 		var x=0
 		while x<len(PT):
@@ -61,7 +68,7 @@ func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		rcrv()
 	else:
-		if mapapp.RR["TT"][0]==accion["TR"][0] and accion["AC"]!=0:#=#accion por turno
+		if mapapp and mapapp.RR["TT"][0]==accion["TR"][0] and accion["AC"]!=0:#=#accion por turno
 			actt()
 			accion["AC"]-=1
 		for i in acctib:#============================================#prosesar acciones
@@ -129,3 +136,13 @@ func actt():                      #activasion
 			print("!!--Accion a activar:",acctib[sp].resource_name)
 		else:EgLb.dado(0,0,449333)
 	else:print("!!--:PASAR")
+
+
+func _on_t_body_entered(body: Node2D) -> void:
+	if body.script and body.R["id"][0]=="pz":
+		var ap=false
+		for i in PT:
+			if i==body:ap=true
+		if ap:PT.append(body);body.tablle=$".";print("ELEMENTO EN TABLERO <",name,"> -:",body.name)
+func _on_t_body_exited(body: Node2D) -> void:
+	pass # Replace with function body.

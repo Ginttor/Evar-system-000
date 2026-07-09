@@ -1,6 +1,22 @@
+#Copyright 2026 Evaristo Velasquez
+#
+#Licensed under the Apache License, Version 2.0 (the "License");
+#you may not use this file except in compliance with the License.
+#You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#Unless required by applicable law or agreed to in writing, software
+#distributed under the License is distributed on an "AS IS" BASIS,
+#WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#See the License for the specific language governing permissions and
+#limitations under the License.
+
+
 @tool extends Node
 
 @export var est_ig:=""          ##estado en juego
+@export var tablle:Node         ##tablero
 @export var ddd_tg:Array[d_tg]  ##targeta de pieza
 @export var etiggg:Array[String]##etiquetas
 const AA_LBL:=["P_","M.","M+","M*","N.","N+","N*","I.","I+","I*","C.","C+","C*","X.","X+","X*","Z.","Z+","Z*"]##etiquetas de animasion (equibalen a RR["activa"]%19)
@@ -21,16 +37,25 @@ const AA_LBL:=["P_","M.","M+","M*","N.","N+","N*","I.","I+","I*","C.","C+","C*",
 	"Sti": 1,#stabilidad
 	"Sps": 1,#espasio
 	}
-@export var RR:={}              ##extras, RR["AA"]=animasiones armadas desde ddd_tg (tiprrh=="M")
+##extras, RR["AA"]=animasiones armadas desde ddd_tg (tiprrh=="M")[br]
+##extras, RR["i0"]=elementos internos desde  ddd_tg (tiprrh=="0")[vr]
+@export var RR:={}
 @export var PT:Array[Node]##binculado
 var R:={"id":["pz",0]}
 
 func _ready() -> void:
-	if !"AA" in RR:RR["AA"]={}
+	if ddd_tg[0].tiprrh=="0":RR["i0"]=[ddd_tg[0]]
 	for i in ddd_tg:
-		i.defn()
-		i.fmtg()
-		if i.tiprrh=="M":RR["AA"][AA_LBL[i.RR["activa"]%len(AA_LBL)]]=i
+			i.defn()
+			i.fmtg()
+			if  i.tiprrh=="0":
+				if !"i0" in RR:
+					RR["i0"]=[null]
+				if i!=RR["i0"][0]:RR["i0"].append(i)
+			elif i.tiprrh=="M":
+				if !"AA" in RR:
+					RR["AA"]={}
+				RR["AA"][AA_LBL[i.RR["activa"]%len(AA_LBL)]]=i
 	if Engine.is_editor_hint():
 		sttr($".")
 	else:
@@ -104,7 +129,7 @@ func motr(E):                   # motor
 				elif E.R["KM"][3]!="." and E.velocity.x>-E.io_0SC["Vel"]:E.R["FF"][0].x=-E.io_0SC["Pot"]*2
 				if "a" in E.R and E.RR["AA"][ej].RR["acionn"]!="AA":E.PT[E.R["a"]].play(E.RR["AA"][ej].RR["acionn"])
 			if E.RR["AA"][ej].RR["lin_og"]==4 or E.RR["AA"][ej].RR["lin_o2"]==5:#-----------------------------------------#salto
-				if E.R["M"][0].count("f"):
+				if "M" in R and E.R["M"][0].count("f"):
 					E.velocity.y=-(E.io_0SC["Pot"]+E.io_0SC["Mas"])*30
 					if "a" in E.R and E.RR["AA"][ej].RR["acionn"]!="AA":E.PT[E.R["a"]].play(E.RR["AA"][ej].RR["acionn"])
 					EgLb.stcM(E,2,false)

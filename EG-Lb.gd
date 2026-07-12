@@ -211,13 +211,13 @@ func poci(p,uv,E):              # posisionamiento de pieza
 	p.global_position.y=(int(xy[1])*E.escall.y)+E.global_position.y
 func aspe(E,oj=null,t="",tx=""):# aspecto de la interfase
 	#================================================================#foco
-	if t=="u":
-		E.entblr=oj.RR["Tb"]
+	if t=="u" and E.ioenje:
+		E.ioenje.tablle=oj.RR["Tb"]
 		E.ioenje.global_position=oj.RR["MK"].global_position
 		#EgLb.bgls(E)
-	if len(E.PT)>1 and E.entblr and E.entblr.focodc:
-		E.global_position=E.entblr.focodc.global_position
-		E.entblr.visible=true
+	if E.ioenje and len(E.PT)>1 and E.ioenje.tablle and E.ioenje.tablle.focodc:
+		E.global_position=E.ioenje.tablle.focodc.global_position
+		E.ioenje.tablle.visible=true
 	#if "CT2" in R:R["CT2"].visible=false
 	
 	#================================================================#imbentario
@@ -227,35 +227,36 @@ func aspe(E,oj=null,t="",tx=""):# aspecto de la interfase
 			E.R["IV"][x].aspect[0].texture=null
 			x+=1
 		x=1
-		while x<len(E.ioenje.RR["i0"]):
-			E.R["IV"][x-1].visible=false
-			E.R["IV"][x-1].aspect[0].texture=null
-			E.R["IV"][x-1].aspect[0].texture=load(E.ioenje.RR["i0"][x].RR["imagen"])
-			E.R["IV"][x-1].visible=true
-			#-----------------------
-			#if E.ioenje.R["lQ"][x]!=-1:
-			#	if E.ioenje.RR["IV"]["K"][E.ioenje.R["lQ"][x]]=="":
-			#		E.R["IV"][x].aspect[0].texture=load(E.ioenje.ddd_tg[E.ioenje.R["lQ"][x]].RR["imagen"])
-			#	else:
-			#		var y=0;while y<len(E.ioenje.ddd_tg[E.ioenje.R["lQ"][x]].Tar_Q_.rutass):
-			#			if E.ioenje.ddd_tg[E.ioenje.R["lQ"][x]].Tar_Q_.rutass[y].split(";")[2]==E.ioenje.RR["IV"]["K"][x]:
-			#				E.R["IV"][x].aspect[0].texture=E.ioenje.ddd_tg[E.ioenje.R["lQ"][x]].Tar_Q_.imlist[y]
-			#				break
-			#			y+=1
-			x+=1
+		if "i0" in E.ioenje.RR:
+			while x<len(E.ioenje.RR["i0"]):
+				E.R["IV"][x-1].visible=false
+				E.R["IV"][x-1].aspect[0].texture=null
+				E.R["IV"][x-1].aspect[0].texture=load(E.ioenje.RR["i0"][x].RR["imagen"])
+				E.R["IV"][x-1].visible=true
+				#-----------------------
+				#if E.ioenje.R["lQ"][x]!=-1:
+				#	if E.ioenje.RR["IV"]["K"][E.ioenje.R["lQ"][x]]=="":
+				#		E.R["IV"][x].aspect[0].texture=load(E.ioenje.ddd_tg[E.ioenje.R["lQ"][x]].RR["imagen"])
+				#	else:
+				#		var y=0;while y<len(E.ioenje.ddd_tg[E.ioenje.R["lQ"][x]].Tar_Q_.rutass):
+				#			if E.ioenje.ddd_tg[E.ioenje.R["lQ"][x]].Tar_Q_.rutass[y].split(";")[2]==E.ioenje.RR["IV"]["K"][x]:
+				#				E.R["IV"][x].aspect[0].texture=E.ioenje.ddd_tg[E.ioenje.R["lQ"][x]].Tar_Q_.imlist[y]
+				#				break
+				#			y+=1
+				x+=1
 	#================================================================#inspeccionador
-	if "LSI" in E.R:
+	if "LSI" in E.R and E.ioenje:
 		x=0;for i in E.R["LSI"].PT:
 			i.text=""
-			if i.name.count("b"):
+			if i.name.count("b") and E.ioenje:
 				if "kQ" in E.ioenje.R and len(E.ioenje.R["kQ"][2])<x:
 					i.text=E.ioenje.R["kQ"][2][x]
 					x+=1
 				else:i.visible=false
-		if "Dm" in E.ioenje.R:
+		if E.ioenje and "Dm" in E.ioenje.R:
 			if E.ioenje.R["Dm"][0]!=-1:
 				E.R["LSI"].ioenje.text=E.ioenje.ddd_tg[E.ioenje.R["Dm"][0]].resource_name#====================================Nombre
-				E.R["LSI"].entblr.text=E.ioenje.RR["IV"]["D"][E.ioenje.R["Dm"][0]]
+				E.R["LSI"].ioenje.tablle.text=E.ioenje.RR["IV"]["D"][E.ioenje.R["Dm"][0]]
 		if "kQ" in E.ioenje.R and E.ioenje.R["lQ"][E.ioenje.R["kQ"][0]]:E.R["LSI"].aspect[1].texture=E.ioenje.R["lQ"][E.ioenje.R["kQ"][0]].RR["imagen"]
 		if "kQ" in E.ioenje.R and E.ioenje.R["lQ"][E.ioenje.R["kQ"][1]]:E.R["LSI"].aspect[2].texture=E.ioenje.R["lQ"][E.ioenje.R["kQ"][1]].RR["imagen"]
 		if t=="n":
@@ -265,8 +266,8 @@ func aspe(E,oj=null,t="",tx=""):# aspecto de la interfase
 			E.R["LSI"].aspect[0].texture=load(oj.RR["imagen"])
 			E.R["LSI"].ioenje.text=oj.resource_name
 			E.R["LSI"].ioenje.text=EgLb.idio(R["LSI"].ioenje.text)
-			E.R["LSI"].entblr.text=tx
-			E.R["LSI"].entblr.text=EgLb.idio(R["LSI"].entblr.text)
+			E.R["LSI"].ioenje.tablle.text=tx
+			E.R["LSI"].ioenje.tablle.text=EgLb.idio(R["LSI"].ioenje.tablle.text)
 		if "AC" in E.ioenje.R:
 			var a=0;x=3;while x<len(E.R["LSI"].PT):
 				if a<len(E.ioenje.R["AC"]):
@@ -277,7 +278,7 @@ func aspe(E,oj=null,t="",tx=""):# aspecto de la interfase
 	if "Md" in E.RR:
 		for i in E.RR["Md"].RR["TB"]:
 			i.visible=false
-	if E.entblr:E.entblr.visible=true
+	if E.ioenje and E.ioenje.tablle:E.ioenje.tablle.visible=true
 func cttb(E):                   # control de tableros
 	E.R["PS"]=[]
 	for e in E.mjugad:
@@ -289,9 +290,9 @@ func icpt(E):                   # inisio de carrga de partida
 		if E.PT[x].name=="AA":E.R["aa"]=x
 		x+=1
 	if E.ioenje:E.ioenje.RR["Md"]=E
-	if E.entblr:
-		E.entblr.RR["Md"]=E
-		for i in E.entblr.PT:
+	if E.ioenje and E.ioenje.tablle:
+		E.ioenje.tablle.RR["Md"]=E
+		for i in E.ioenje.tablle.PT:
 			E.R["PS"].append(i)
 	for i in E.R["IV"]:i.RR["MD"]=E
 	if len(EgLb.mp)>0:
@@ -309,30 +310,32 @@ func miti(E,M,t):               # prosesamiento de mision
 		var ct=0
 		var y=0;while y<len(M.RR["a_cheq"]) and t==M.RR["intchq"]:
 			for i in E.R["PS"]:#===========================#rebision de elemetos a chequear
-				for e in i.etiggg:
-					if e==M.RR["objchq"][y]:
-						if M.RR["a_cheq"][y]==0:
-							var x=0;while x <len(i.ddd_tg):
-								if i.ddd_tg[x] and i.ddd_tg[x].resource_name==M.RR["crcidn"][y]:
-									ct+=1
-								x+=1
-						#-------------------+
-						if M.RR["a_cheq"][y]==1:
-							var x=0;while x <len(i.R["II"]):
-								if i.R["II"][x].etiggg[len(i.R["II"][x].etiggg)-1].count(M.RR["crcidn"][y])>0:
-									ct+=1
-								x+=1
-						#-------------------+
-						if M.RR["a_cheq"][y]==2 and len(i.R["II"])>0:#"iQ"
-							var tu=null
-							if i.R["II"][0].name=="P":tu=i.R["II"][0].ioenje
-							else:tu=i.R["II"][0]
-							var x=0;while x <len(tu.ddd_tg):
-								tu.ddd_tg[x].defn()
-								print("MS_iQ:",M.resource_name,tu.ddd_tg[x].resource_name,"==",M.RR["crcidn"][y])
-								if tu.ddd_tg[x] and tu.ddd_tg[x].resource_name==M.RR["crcidn"][y]:
-									ct+=1
-								x+=1
+				if i:
+					for e in i.etiggg:
+						if e==M.RR["objchq"][y]:
+							if M.RR["a_cheq"][y]==0:
+								var x=0;while x <len(i.ddd_tg):
+									if i.ddd_tg[x] and i.ddd_tg[x].resource_name==M.RR["crcidn"][y]:
+										ct+=1
+									x+=1
+							#-------------------+
+							if M.RR["a_cheq"][y]==1:
+								var x=0;while x <len(i.R["II"]):
+									for o in i.R["II"][x].etiggg:
+										if o.count(M.RR["crcidn"][y])>0:
+											ct+=1
+									x+=1
+							#-------------------+
+							if M.RR["a_cheq"][y]==2 and len(i.R["II"])>0:#"iQ"
+								var tu=null
+								if i.R["II"][0].name=="P":tu=i.R["II"][0].ioenje
+								else:tu=i.R["II"][0]
+								var x=0;while x <len(tu.ddd_tg):
+									tu.ddd_tg[x].defn()
+									print("MS_iQ:",M.resource_name,tu.ddd_tg[x].resource_name,"==",M.RR["crcidn"][y])
+									if tu.ddd_tg[x] and tu.ddd_tg[x].resource_name==M.RR["crcidn"][y]:
+										ct+=1
+									x+=1
 			##===========================#prosesar resultados
 			if ct>=M.RR["cntreq"][y]:
 				print("MS_micion cumplida:",M.resource_name)
@@ -384,8 +387,8 @@ func reuv(E,p,c=null):          # reuvicasion
 	if !c:EgLb.poci(p.R["II"][0],int(pz[2]), E.RR["MM"][tb])
 	else:EgLb.poci(c,int(pz[2]), E.RR["MM"][tb])
 	E.mjugad[0].PT[E.mjugad[0].R["aa"]].play("finTb")
-	E.mjugad[0].entblr=E.RR["MM"][tb]
-	E.mjugad[0].R["PS"]=E.mjugad[0].R["PS"]+E.mjugad[0].entblr.PT
+	E.mjugad[0].ioenje.tablle=E.RR["MM"][tb]
+	E.mjugad[0].R["PS"]=E.mjugad[0].R["PS"]+E.mjugad[0].ioenje.tablle.PT
 	EgLb.aspe(E.mjugad[0])
 func tigt(E) :                  # paso del tiempo
 	#================================================#flujo de tiempo y su medision

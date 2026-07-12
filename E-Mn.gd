@@ -25,7 +25,6 @@
 	"esp",  #cloche
 	"c",    #accionar
 	]
-@export var entblr:Node   ##en el tablero
 @export var mision:={  ##mision prinsipal
 	"ms":null,
 	"wi":"",
@@ -35,9 +34,9 @@
 var R:={}
 
 func _ready() -> void:
+	if ioenje:ioenje.etiggg.append("Mn"+$".".name)
 	if Engine.is_editor_hint():
 		if len(PT)>1:
-			if ioenje and !"Fz" in ioenje.RR and entblr:ioenje.RR["Fz"]=Vector3i(0,0,0)
 			if !"P-PI" in RR:RR["P-PI"]="//pp"
 		var x=0;while x<len(PT):
 			if PT[x] and PT[x]==$".":R["CM"] = PT[x];R["P"]=[null,null,null,null,]#caramara asignada
@@ -77,13 +76,13 @@ func _ready() -> void:
 				elif PT[x] and PT[x].name=="p3":R["P"][3]= PT[x]##cartel de evento 3
 				elif PT[x] and PT[x].name.count("stk"):R["IV"].append(PT[x]);PT[x].PT.append($".")
 				x+=1
-		ioenje.etiggg.append("Mn"+$".".name)
-		if entblr and entblr.fuerza!=Vector3i(0,0,0):
-			ioenje.RR["Fz"]=entblr.fuerza
 		EgLb.aspe($".")
 		EgLb.icpt($".")
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
+		if mision["ms"]:
+			mision["ms"].defn()
+			mision["ms"].fmtg()
 		if "P" in R:
 			R["P"][1].position.x=R["P"][0].position.x*-1;R["P"][1].position.y=R["P"][0].position.y
 			R["P"][2].position.x=R["P"][0].position.x   ;R["P"][2].position.y=R["P"][0].position.y*-1
@@ -136,13 +135,13 @@ func ilos(E,h):                 # hilos
 func ccam(E,P):                 # correccion de posision de camara
 	if P.global_position.x>E.R["CM"].global_position.x+E.R["P"][0].position.x:
 		E.R["CM"].global_position.x+=P.global_position.x-(E.R["CM"].global_position.x+E.R["P"][0].position.x)
-		if E.entblr and E.entblr.spcmap:
-			E.entblr.spcmap.rotation-=0.001
+		if E.ioenje.tablle and E.ioenje.tablle.spcmap:
+			E.ioenje.tablle.spcmap.rotation-=0.001
 			E.ioenje.velocity.x=0
 	if P.global_position.x<E.R["CM"].global_position.x-E.R["P"][0].position.x:
 		E.R["CM"].global_position.x+=P.global_position.x-(E.R["CM"].global_position.x-E.R["P"][0].position.x)
-		if E.entblr and E.entblr.spcmap:
-			E.entblr.spcmap.rotation+=0.001
+		if E.ioenje.tablle and E.ioenje.tablle.spcmap:
+			E.ioenje.tablle.spcmap.rotation+=0.001
 			E.ioenje.velocity.x=0
 	if P.global_position.y>E.R["CM"].global_position.y+E.R["P"][0].position.y:E.R["CM"].global_position.y+=P.global_position.y-(E.R["CM"].global_position.y+E.R["P"][0].position.y)
 	if P.global_position.y<E.R["CM"].global_position.y-E.R["P"][0].position.y:E.R["CM"].global_position.y+=P.global_position.y-(E.R["CM"].global_position.y-E.R["P"][0].position.y)
@@ -165,10 +164,10 @@ func focl(E):                   # focalizar
 				E.R["CT"].global_position=i.global_position
 				i.R["id"][1]=0;break
 	if ioenje and "CT" in E.R and "II" in ioenje.R:
-		if len(ioenje.R["II"])>0:
+		if len(ioenje.R["II"])>0 and "i0" in ioenje.R["II"][0].RR:
 			E.R["CT"].visible=true
 			E.R["CT"].global_position=ioenje.R["II"][0].global_position
-			E.PT[E.R["A"]].aspect[0].texture=load(ioenje.R["II"][0].ddd_tg.RR["imagen"])
+			E.PT[E.R["A"]].aspect[0].texture=load(ioenje.R["II"][0].RR["i0"][0].RR["imagen"])
 			E.PT[E.R["A"]].PT[E.PT[E.R["A"]].R["a"]].play("on")
 		else:
 			E.R["CT"].visible=false

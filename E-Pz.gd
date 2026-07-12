@@ -44,7 +44,9 @@ const AA_LBL:=["P_","M.","M+","M*","N.","N+","N*","I.","I+","I*","C.","C+","C*",
 var R:={"id":["pz",0]}
 
 func _ready() -> void:
-	if ddd_tg[0].tiprrh=="0":RR["i0"]=[ddd_tg[0]]
+	if len(ddd_tg)>0 and ddd_tg[0].tiprrh=="0":
+		RR["i0"]=[ddd_tg[0]]
+		etiggg.append(ddd_tg[0].resource_name)
 	for i in ddd_tg:
 			i.defn()
 			i.fmtg()
@@ -59,8 +61,6 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		sttr($".")
 	else:
-		if len(ddd_tg)>0:
-			etiggg.append(ddd_tg[0].resource_name)
 		if !"II" in R:R["II"]=[]
 		if !"YY" in R:R["YY"]=[]
 		if !"VV" in R:R["VV"]=[]
@@ -183,13 +183,13 @@ func sttr(E):                   # estructurar
 		#		E.R["KM"].append(".")
 		#		y+=1
 		if E.PT[x].name=="P":E.R["BP"]=x
-		if E.PT[x].name=="f":EgLb.stcM(E.PT[x],5, true);EgLb.stcL(E.PT[x],1, false);EgLb.stcM(E.PT[x],1, true)
+		if E.PT[x].name=="f":EgLb.stcM(E.PT[x],5, true);EgLb.stcL(E.PT[x],1, false);EgLb.stcM(E.PT[x],1, false)
 		if E.PT[x].name=="i":EgLb.stcL(E.PT[x],1, false);EgLb.stcM(E.PT[x],1, true);EgLb.stcM(E.PT[x],4, true)
 		if E.PT[x].name=="AA"  :
 			E.R["a"]=x
 			if E.ddd_tg and !"M" in E.RR["AA"]:E.RR["AA"]["M"]=null
 		#if E.script==load("res://Evar system 000/E-Pz.gd"):
-		if "SK" in E.RR["AA"]:E.R["fp"]=false
+		if "AA" in E.RR and "SK" in E.RR["AA"]:E.R["fp"]=false
 		if E.io_0SC["Sps"]>0:
 			if "IV" in E.RR:
 				E.R["Dm"]=[-1] #en lamno del dedo

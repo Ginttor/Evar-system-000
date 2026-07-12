@@ -118,9 +118,9 @@ func fmtg():                   # formato de tarjeta
 		var tl=3
 		rrinfo+="A chequear:\n"
 		var x=0;while x<len(RR["a_cheq"]):
-			if   RR["a_cheq"][x]%tl==0:rrinfo+="\t"+str(x)+"- 0=todo en la Pz\n"
-			elif RR["a_cheq"][x]%tl==1:rrinfo+="\t"+str(x)+"- 1=la interaccion\n"
-			elif RR["a_cheq"][x]%tl==2:rrinfo+="\t"+str(x)+"- 2=todo en la interaccion\n"
+			if   RR["a_cheq"][x]%tl==0:rrinfo+="\t["+str(x)+"]- 0=todo en la Pz\n"
+			elif RR["a_cheq"][x]%tl==1:rrinfo+="\t["+str(x)+"]- 1=la interaccion\n"
+			elif RR["a_cheq"][x]%tl==2:rrinfo+="\t["+str(x)+"]- 2=todo en la interaccion\n"
 			if RR["a_cheq"][x]>=tl:RR["a_cheq"][x]=0
 			x+=1
 	if "acionn" in RR:rrinfo+="Nombre de la animasion: "+RR["acionn"]+"\n"
@@ -128,44 +128,44 @@ func fmtg():                   # formato de tarjeta
 		rrinfo+="Objetivos a chequear:\n"
 		var x=0;while x<len(RR["objchq"]):
 			if RR["objchq"][x]!="//0" and RR["objchq"][x]!=null and RR["objchq"][x]!="":
-				rrinfo+="\t"+str(x)+"- "+RR["objchq"][x]+"\n"
-			else:rrinfo+="\t"+str(x)+"- ...\n"
+				rrinfo+="\t["+str(x)+"]- "+RR["objchq"][x]+"\n"
+			else:rrinfo+="\t["+str(x)+"]- ...\n"
 			x+=1
 	if "crcidn" in RR:
 		rrinfo+="Marca a obserbar:\n"
 		var x=0;while x<len(RR["crcidn"]):
-			rrinfo+="\t"+str(x)+"- "+RR["crcidn"][x]+"\n"
+			rrinfo+="\t["+str(x)+"]- "+RR["crcidn"][x]+"\n"
 			x+=1
 	if "cntreq" in RR:
 		rrinfo+="Cantidad requerida:\n"
 		var x=0;while x<len(RR["cntreq"]):
-			rrinfo+="\t"+str(x)+"- "+str(RR["cntreq"][x])+"\n"
+			rrinfo+="\t["+str(x)+"]- "+str(RR["cntreq"][x])+"\n"
 			x+=1
 	if "aareco" in RR:
 		rrinfo+="Animasiones de recompensa:\n"
 		var x=0;while x<len(RR["aareco"]):
-			rrinfo+="\t"+str(x)+"- "+str(RR["aareco"][x])+"\n"
+			rrinfo+="\t["+str(x)+"]- "+str(RR["aareco"][x])+"\n"
 			x+=1
 	if "trfcnd" in RR:
 		rrinfo+="Trofeos:\n"
 		var x=0;while x<len(RR["trfcnd"]):
 			if RR["trfcnd"][x]!="//Tg" and RR["trfcnd"][x]!=null and RR["trfcnd"][x]!="":
 				EgLb.defn(load(RR["trfcnd"][x]))
-				rrinfo+="\t"+str(x)+"- "+load(RR["trfcnd"][x]).resource_name+"\n"
-			else:rrinfo+="\t"+str(x)+"- ...\n"
+				rrinfo+="\t["+str(x)+"]- "+load(RR["trfcnd"][x]).resource_name+"\n"
+			else:rrinfo+="\t["+str(x)+"]- ...\n"
 			x+=1
 	if "castig" in RR:
 		rrinfo+="Animasiones de castigo:\n"
 		var x=0;while x<len(RR["castig"]):
-			rrinfo+="\t"+str(x)+"- "+str(RR["castig"][x])+"\n"
+			rrinfo+="\t["+str(x)+"]- "+str(RR["castig"][x])+"\n"
 			x+=1
 	if "cstapl" in RR:
 		rrinfo+="Castigos:\n"
 		var x=0;while x<len(RR["cstapl"]):
 			if RR["cstapl"][x]!="//Tg" and RR["cstapl"][x]!=null and RR["cstapl"][x]!="":
 				EgLb.defn(load(RR["cstapl"][x]))
-				rrinfo+="\t"+str(x)+"- "+load(RR["cstapl"][x]).resource_name+"\n"
-			else:rrinfo+="\t"+str(x)+"- ...\n"
+				rrinfo+="\t["+str(x)+"]- "+load(RR["cstapl"][x]).resource_name+"\n"
+			else:rrinfo+="\t["+str(x)+"]- ...\n"
 			x+=1
 	if "intchq" in RR:
 		var tl=6

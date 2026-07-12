@@ -37,13 +37,13 @@
 var R:={"id":["tb",0]}
 
 func _ready() -> void:
+	var x=0
+	while x<len(PT):
+		if !"Fz" in PT[x].RR:
+			PT[x].RR["Fz"]=Vector3i(0,0,0)
+		PT[x].RR["Fz"]=$".".fuerza
+		x+=1
 	if Engine.is_editor_hint():
-		var x=0
-		while x<len(PT):
-			PT[x].RR["Md"]=$"."
-			if !"Fz" in PT[x].RR:PT[x].RR["Fz"]=Vector3i(0,0,0)
-			PT[x].RR["Fz"]=$".".fuerza
-			x+=1
 		if len(enbolt)>0 :
 			RR["VL"]=[]
 			for i in enbolt:
@@ -55,12 +55,6 @@ func _ready() -> void:
 				rt+=i
 		print("!!--Reserva: ",rt,"/",recerv.z)
 		if len(enbolt)>0:RR["EV"]=[]
-		var x=0
-		while x<len(PT):
-			PT[x].RR["Md"]=$"."
-			if !"Fz" in PT[x].RR:PT[x].RR["Fz"]=Vector3i(0,0,0)
-			PT[x].RR["Fz"]=$".".fuerza
-			x+=1
 		if ddd_tg==null:
 			R["evEm"]=0#evento en mano
 			enbolt=EgLb.barj(enbolt)
@@ -143,6 +137,9 @@ func _on_t_body_entered(body: Node2D) -> void:
 		var ap=false
 		for i in PT:
 			if i==body:ap=true
+		if !"Fz" in body.RR:
+			body.RR["Fz"]=Vector3i(0,0,0)
+		body.RR["Fz"]=$".".fuerza
 		if ap:PT.append(body);body.tablle=$".";print("ELEMENTO EN TABLERO <",name,"> -:",body.name)
 func _on_t_body_exited(body: Node2D) -> void:
 	pass # Replace with function body.

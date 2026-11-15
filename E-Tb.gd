@@ -15,7 +15,7 @@
 
 @tool extends Node
 
-@export var ddd_tg:d_tg            ##targeta de entidad
+@export var ddd_tg:Array[d_tg]     ##targeta de resrva
 @export var mapapp:Node            ##mapa al que pertenese
 @export var fuerza:=Vector3i(0,0,0)##fuerzas influentes
 @export var accion:={              ##accionamiento
@@ -30,13 +30,15 @@
 @export var PT:Array[Node]         ##binculado
 @export_group("Emboltorio")
 @export var recerv:=Vector3i(0,1,4)##limites (minimo en pantalla | maximo en panalla | maximo de reserva)
-@export var enbolt:Array[d_tg]     ##targetas de resrva
 @export var reppem:Array[int]      ##repetisiones de targetas
 @export var RR:={}                 ##extras
 
 var R:={"id":["tb",0]}
 
 func _ready() -> void:
+	for i in ddd_tg:
+		i.defn()
+		i.fmtg()
 	var x=0
 	while x<len(PT):
 		if !"Fz" in PT[x].RR:
@@ -44,9 +46,12 @@ func _ready() -> void:
 		PT[x].RR["Fz"]=$".".fuerza
 		x+=1
 	if Engine.is_editor_hint():
-		if len(enbolt)>0 :
+		if !"Tb" in EgLb.R:EgLb.R["Tb"]={}
+		EgLb.R["Tb"][name]=scene_file_path
+		EgLb.rgst(EgLb.R,"res://","RR")
+		if len(ddd_tg)>0 :
 			RR["VL"]=[]
-			for i in enbolt:
+			for i in ddd_tg:
 				RR["VL"].append(Vector2i(0,0))
 	else:
 		var rt=0
@@ -54,13 +59,15 @@ func _ready() -> void:
 			if i>0:
 				rt+=i
 		print("!!--Reserva: ",rt,"/",recerv.z)
-		if len(enbolt)>0:RR["EV"]=[]
+		if len(ddd_tg)>0:RR["EV"]=[]
 		if ddd_tg==null:
 			R["evEm"]=0#evento en mano
-			enbolt=EgLb.barj(enbolt)
+			ddd_tg=EgLb.barj(ddd_tg)
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		rcrv()
+		for i in ddd_tg:
+			i.fmtg()
 	else:
 		if mapapp and mapapp.RR["TT"][0]==accion["TR"][0] and accion["AC"]!=0:#=#accion por turno
 			actt()
@@ -73,7 +80,7 @@ func _process(_delta: float) -> void:
 				EgLb.reuv(mapapp,PT[x])
 				PT[x].est_ig="pz"
 			x+=1
-		if ddd_tg and ddd_tg.tiprrh=="L" and mapapp:
+		if len(ddd_tg)>0 and ddd_tg[0].tiprrh=="L" and mapapp:
 			for i in mapapp.mjugad:
 				for e in mapapp.mm["VP"]:
 					if $".".name.count(e.split(";")[0]):
@@ -92,7 +99,7 @@ func _process(_delta: float) -> void:
 #========================
 func chmt(t,q):                   # kuez
 	var y=0;var x=0
-	if !"RK" in RR:
+	if !"RK" in RR:#control de progreso
 		RR["RK"]=[]
 		for i in acctib:
 			if  i and i.tiprrh=="Q":RR["RK"].append("")
@@ -100,28 +107,29 @@ func chmt(t,q):                   # kuez
 			var r:=""
 			if   q and r=="":#==================================#ejecusion de kues
 				y=0;while y<len(q.RR["ruatas"]):
-					if q.RR["ruatas"][y].split(":")[0]==RR["RK"][x] and q.RR["intrpt"][y]:
-						r=EgLb.miti(mapapp.mjugad[EgLb.dado(0,len(mapapp.mjugad))],load(q.RR["intrpt"][y]),t)
-						print("KZ_en revision:",q.resource_name," <r>:",r)
+					if q.RR["ruatas"][y].split(":")[0]==RR["RK"][x] and q.RR["intrpt"][y]!="":
+						r=EgLb.miti(mapapp,load(q.RR["intrpt"][y]),t)
+						print("KZ_en revision:",q.resource_name," <r>:",r," --",q.RR["intrpt"][y],t)
 						break
 					y+=1
-			elif q and r!="":#==================================#prosesar resultados de kues
+			if q and r!="":#==================================#prosesar resultados de kues
 				var sd=EgLb.alqm(q.RR["ruatas"],RR["RK"][x],r)
 				r=sd[0]
 				RR["RK"][x]=sd[1]
 				print("KZ_resultado de:",q.resource_name," =>",RR["RK"][x])
-			elif q and r=="f.":#================================#finalizar kues
-				print("KZ_finalisada:",q.resource_name,"(",RR["CK"][y],")")
+			if q and RR["RK"][x]=="f.":#================================#finalizar kues
+				print("KZ_finalisada:",q.resource_name)
 			x+=1
 func rcrv():                      #coerensia
-	if len(reppem)!=len(enbolt):
-		reppem=[]
-		for i in enbolt:reppem.append(0)
+	#if len(reppem)!=len(ddd_tg):
+	#	reppem=[]
+	#	for i in ddd_tg:reppem.append(0)
+	pass
 func actt():                      #activasion
 	var el=EgLb.dado(0,2)
 	if el==0 and acctib.count(null)>0:
 		var mt=[]
-		for i in enbolt:
+		for i in ddd_tg:
 			i.defn()
 			if i.tiprrh=="Q" or i.tiprrh=="L":mt.append(i)
 		var sp=acctib.find(null)
@@ -142,4 +150,4 @@ func _on_t_body_entered(body: Node2D) -> void:
 		body.RR["Fz"]=$".".fuerza
 		if ap:PT.append(body);body.tablle=$".";print("ELEMENTO EN TABLERO <",name,"> -:",body.name)
 func _on_t_body_exited(body: Node2D) -> void:
-	pass # Replace with function body.
+	PT.erase(body)

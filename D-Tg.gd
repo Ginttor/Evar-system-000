@@ -13,21 +13,31 @@
 #limitations under the License.
 
 
-@tool
-extends Resource
+@tool extends Resource
 class_name d_tg
 
-@export_multiline var                                 rrinfo:=""##información
-@export var                                           cllloz:=""##resumen de targeta
-@export_enum("0","1","9","A","M","E","Q","R","L") var tiprrh:=""##formatos de tarjeta
-@export var                                           RR:={}    ##extras
+@export_multiline var                         rrinfo:=""##información
+@export var                                   cllloz:=""##resumen de datos
+@export_enum("0","1","9","A","M","E","Q","R","L") var tiprrh:=""##formatos
+@export var                                   RR:={}    ##extras
 
 #========================
-func fmtg():                   # formato de tarjeta
+func rgtg(n):                    # registrar targeta
+	if !"Tg" in EgLb.R:EgLb.R["Tg"]={}
+	var ns=true
+	for i in EgLb.R["Tg"]:
+		if i==n:ns=false;break
+	if ns:
+		EgLb.R["Tg"][n]=resource_path
+		EgLb.rgst(EgLb.R,"res://","RR")
+func fmtg():                     # formato de tarjeta
 	if   tiprrh=="0":
-		if !"estrus" in RR:RR["estrus"]=0                                                  #iestructura de esensia
-		if !"imagen" in RR:RR["imagen"]="res://Evar_system_000/rqs/p.png"                  #imagen de referensia
-		if !"descri" in RR:RR["descri"]="..."                                              #descripsion
+		if !"imagen" in RR:RR["imagen"]="//imagen"                                         #imagen de referensia
+		if !"descri" in RR:RR["descri"]={                                                  #interno
+			"v0":["x",Vector2i(3,3)],"v1":["x",Vector2i(0,0)],
+			"ly":4,
+			"e0":["e",3],"e1":["e",0],"e2":["e",0],
+			"lq":2}        
 		if !"lem_ak" in RR:RR["lem_ak"]={"0": 0,"A": 0,"M": 0,"E": 0,"Q": 0,"R": 0,"L": 0,}#limite de acumulasiones
 		if !"fin_es" in RR:RR["fin_es"]="//Pz"                                             #forma fisica
 		if !"markks" in RR:RR["markks"]=["//!=(0,1,9)"]                                    #marcas caracteristicas
@@ -44,28 +54,28 @@ func fmtg():                   # formato de tarjeta
 		if !"a_cheq" in RR:RR["a_cheq"]=[0]#0-9
 		if !"intchq" in RR:RR["intchq"]=0
 		if !"timlim" in RR:RR["timlim"]=0
-		if !"objchq" in RR:RR["objchq"]=["//0"] #objeto a chequear
-		if !"crcidn" in RR:RR["crcidn"]=["ojo"] #objetivo de comprobasion
-		if !"cntreq" in RR:RR["cntreq"]=[0]     #cantidad para ser valido
-		#---------------------------------------#
-		if !"aareco" in RR:RR["aareco"]=["AA"]  #animasion de victoria
-		if !"trfcnd" in RR:RR["trfcnd"]=["//Tg"]#trofeo a dar
-		if !"castig" in RR:RR["castig"]=["AA"]  #animasion de derrota
-		if !"cstapl" in RR:RR["cstapl"]=["//Tg"]#castigp
+		if !"objchq" in RR:RR["objchq"]=["//0"]   #objeto a chequear
+		if !"crcidn" in RR:RR["crcidn"]=["ojo"]   #objetivo de comprobasion
+		if !"cntreq" in RR:RR["cntreq"]=[0]       #cantidad para ser valido
+		#-----------------------------------------#
+		if !"aareco" in RR:RR["aareco"]=["AA"]    #animasion de victoria
+		if !"trfcnd" in RR:RR["trfcnd"]=["//Tg-R"]#trofeo a dar
+		if !"castig" in RR:RR["castig"]=["AA"]    #animasion de derrota
+		if !"cstapl" in RR:RR["cstapl"]=["//Tg-R"]#castigp
 	elif tiprrh=="Q":
 		if !"ruatas" in RR:RR["ruatas"]=["estado:elemento de estado:resultado:cargas"]#rutas
 		if !"efecto" in RR:RR["efecto"]=["//A"]                                       #efecto a emitir
 		if !"reaccn" in RR:RR["reaccn"]=["AA"]                                        #animasion de reaccion
-		if !"intrpt" in RR:RR["intrpt"]=["//E"]                                       #interprete de mision
+		if !"intrpt" in RR:RR["intrpt"]=["//Tg-E"]                                    #interprete de mision
 		if !"lstimg" in RR:RR["lstimg"]=["//img"]                                     #imagen de cada fase
-		if !"rsiduo" in RR:RR["rsiduo"]=["//Tg"]                                      #targeta a expulsar
+		if !"rsiduo" in RR:RR["rsiduo"]=["//Tg-0"]                                    #targeta a expulsar
 	elif tiprrh=="R":
 		if !"marcaa" in RR:RR["marcaa"]=""
 		if !"efecto" in RR:RR["efecto"]=["//A"]
 	elif tiprrh=="L":
-		if !"efecto" in RR:RR["ejecus"]=0#a=ambiente
-		if !"efecto" in RR:RR["imbmin"]=["//Tg"]
-		if !"efecto" in RR:RR["imbext"]=[":0:"]
+		if !"ejecus" in RR:RR["ejecus"]=0#a=ambiente
+		if !"imbmin" in RR:RR["imbmin"]=["//Tg"]
+		if !"imbext" in RR:RR["imbext"]=[":0:"]
 	rrinfo=""
 	if "markks" in RR:
 		var tipo=[false,false,false,false,false,false,]
@@ -90,14 +100,6 @@ func fmtg():                   # formato de tarjeta
 		if tipo[5]:m+="L"
 		if RR["lem_ak"]["L"]>0:m+="l"
 		rrinfo+="Marcas: "+m+"\n"
-	if "estrus" in RR:
-		var tl=5
-		if   RR["estrus"]%tl==0:rrinfo+="Estructura: 0=personaje\n"
-		elif RR["estrus"]%tl==1:rrinfo+="Estructura: 1=objeto\n"
-		elif RR["estrus"]%tl==2:rrinfo+="Estructura: 2=equipo\n"
-		elif RR["estrus"]%tl==3:rrinfo+="Estructura: 3=inmobiliario\n"
-		elif RR["estrus"]%tl==4:rrinfo+="Estructura: 4=estructura\n"
-		if RR["estrus"]>=tl:RR["estrus"]=0
 	if "ejecus" in RR:
 		var tl=13
 		if   RR["ejecus"]%tl==0:rrinfo+="Eventualidad: 0=ambiente.        {o}\n"
@@ -110,24 +112,25 @@ func fmtg():                   # formato de tarjeta
 		elif RR["ejecus"]%tl==7:rrinfo+="Eventualidad: 7=surgir           o_o\n"
 		elif RR["ejecus"]%tl==8:rrinfo+="Eventualidad: 8=encontrado       o<Q\n"
 		elif RR["ejecus"]%tl==9:rrinfo+="Eventualidad: 9=rutina           &o&\n"
-		elif RR["ejecus"]%tl==10:rrinfo+="Eventualidad: 10=emcarnar         }o{\n"
-		elif RR["ejecus"]%tl==11:rrinfo+="Eventualidad: 11=momento magico   JoL\n"
-		elif RR["ejecus"]%tl==12:rrinfo+="Eventualidad: 12=conflicto        oxo\n"
+		elif RR["ejecus"]%tl==10:rrinfo+="Eventualidad: 10=emcarnar       }o{\n"
+		elif RR["ejecus"]%tl==11:rrinfo+="Eventualidad: 11=momento magico JoL\n"
+		elif RR["ejecus"]%tl==12:rrinfo+="Eventualidad: 12=conflicto      oxo\n"
 		if RR["ejecus"]>=tl:RR["ejecus"]=0
 	if "a_cheq" in RR:
-		var tl=3
+		var tl=4
 		rrinfo+="A chequear:\n"
 		var x=0;while x<len(RR["a_cheq"]):
 			if   RR["a_cheq"][x]%tl==0:rrinfo+="\t["+str(x)+"]- 0=todo en la Pz\n"
 			elif RR["a_cheq"][x]%tl==1:rrinfo+="\t["+str(x)+"]- 1=la interaccion\n"
 			elif RR["a_cheq"][x]%tl==2:rrinfo+="\t["+str(x)+"]- 2=todo en la interaccion\n"
+			elif RR["a_cheq"][x]%tl==3:rrinfo+="\t["+str(x)+"]- 3=en lo equipado\n"
 			if RR["a_cheq"][x]>=tl:RR["a_cheq"][x]=0
 			x+=1
 	if "acionn" in RR:rrinfo+="Nombre de la animasion: "+RR["acionn"]+"\n"
 	if "objchq" in RR:
 		rrinfo+="Objetivos a chequear:\n"
 		var x=0;while x<len(RR["objchq"]):
-			if RR["objchq"][x]!="//0" and RR["objchq"][x]!=null and RR["objchq"][x]!="":
+			if FileAccess.file_exists(RR["objchq"][x]):
 				rrinfo+="\t["+str(x)+"]- "+RR["objchq"][x]+"\n"
 			else:rrinfo+="\t["+str(x)+"]- ...\n"
 			x+=1
@@ -149,9 +152,10 @@ func fmtg():                   # formato de tarjeta
 	if "trfcnd" in RR:
 		rrinfo+="Trofeos:\n"
 		var x=0;while x<len(RR["trfcnd"]):
-			if RR["trfcnd"][x]!="//Tg" and RR["trfcnd"][x]!=null and RR["trfcnd"][x]!="":
-				EgLb.defn(load(RR["trfcnd"][x]))
-				rrinfo+="\t["+str(x)+"]- "+load(RR["trfcnd"][x]).resource_name+"\n"
+			if FileAccess.file_exists(RR["trfcnd"][x]):
+				var tg=load(RR["trfcnd"][x])
+				tg.defn()
+				rrinfo+="\t["+str(x)+"]- "+tg.resource_name+"\n"
 			else:rrinfo+="\t["+str(x)+"]- ...\n"
 			x+=1
 	if "castig" in RR:
@@ -159,12 +163,57 @@ func fmtg():                   # formato de tarjeta
 		var x=0;while x<len(RR["castig"]):
 			rrinfo+="\t["+str(x)+"]- "+str(RR["castig"][x])+"\n"
 			x+=1
+	if "lstimg" in RR:
+		rrinfo+="Imagen de cada fase:\n"
+		var x=0;while x<len(RR["lstimg"]):
+			rrinfo+="\t["+str(x)+"]- "+RR["lstimg"][x]+"\n"
+			x+=1
+	if "reaccn" in RR:
+		rrinfo+="Animasion de reaccion:\n"
+		var x=0;while x<len(RR["reaccn"]):
+			rrinfo+="\t["+str(x)+"]- "+RR["reaccn"][x]+"\n"
+			x+=1
+	if "efecto" in RR:
+		rrinfo+="Efecto a emitir de Tg-A:\n"
+		var x=0;while x<len(RR["efecto"]):
+			if FileAccess.file_exists(RR["efecto"][x]) and load(RR["efecto"][x]).tiprrh=="A":
+				var tg=load(RR["efecto"][x])
+				tg.defn()
+				rrinfo+="\t["+str(x)+"]- "+tg.resource_name+"\n"
+			else:
+				rrinfo+="\t["+str(x)+"]- ...\n"
+				if FileAccess.file_exists(RR["efecto"][x]):RR["efecto"][x]="//A"
+			x+=1
+	if "ruatas" in RR:
+		rrinfo+="Rutas [estado:elemento de estado:resultado:cargas] :\n"
+		var x=0;while x<len(RR["ruatas"]):
+			rrinfo+="\t["+str(x)+"]- "+RR["ruatas"][x]+"\n"
+			x+=1
+	if "intrpt" in RR:
+		rrinfo+="Interprete de mision con formato Tg-E:\n"
+		var x=0;while x<len(RR["intrpt"]):
+			if FileAccess.file_exists(RR["intrpt"][x]) and load(RR["intrpt"][x]).tiprrh=="E":
+				var tg=load(RR["intrpt"][x])
+				tg.defn()
+				rrinfo+="\t["+str(x)+"]- "+tg.resource_name+"\n"
+			else:
+				rrinfo+="\t["+str(x)+"]- ...\n"
+				if FileAccess.file_exists(RR["intrpt"][x]):RR["intrpt"][x]="//E"
+			x+=1
 	if "cstapl" in RR:
 		rrinfo+="Castigos:\n"
 		var x=0;while x<len(RR["cstapl"]):
-			if RR["cstapl"][x]!="//Tg" and RR["cstapl"][x]!=null and RR["cstapl"][x]!="":
-				EgLb.defn(load(RR["cstapl"][x]))
+			if FileAccess.file_exists(RR["cstapl"][x]):
+				load(RR["cstapl"][x]).defn()
 				rrinfo+="\t["+str(x)+"]- "+load(RR["cstapl"][x]).resource_name+"\n"
+			else:rrinfo+="\t["+str(x)+"]- ...\n"
+			x+=1
+	if "rsiduo" in RR:
+		rrinfo+="Targeta a expulsar:\n"
+		var x=0;while x<len(RR["rsiduo"]):
+			if FileAccess.file_exists(RR["rsiduo"][x]):
+				load(RR["rsiduo"][x]).defn()
+				rrinfo+="\t["+str(x)+"]- "+load(RR["rsiduo"][x]).resource_name+"\n"
 			else:rrinfo+="\t["+str(x)+"]- ...\n"
 			x+=1
 	if "intchq" in RR:
@@ -230,7 +279,7 @@ func fmtg():                   # formato de tarjeta
 		elif RR["condii"]%tl==3:rrinfo+="Condision: 3=en piso\n"
 		if RR["condii"]>=tl:RR["condii"]=0
 	if "lin_og" in RR:
-		var tl=10
+		var tl=11
 		if   RR["lin_og"]%tl==0:rrinfo+="Funsion : 0=mover\n"
 		elif RR["lin_og"]%tl==1:rrinfo+="Funsion : 1=orientar x\n"
 		elif RR["lin_og"]%tl==2:rrinfo+="Funsion : 2=orientar y\n"
@@ -241,9 +290,10 @@ func fmtg():                   # formato de tarjeta
 		elif RR["lin_og"]%tl==7:rrinfo+="Funsion : 7=recuperacion\n"
 		elif RR["lin_og"]%tl==8:rrinfo+="Funsion : 8=divagar\n"
 		elif RR["lin_og"]%tl==9:rrinfo+="Funsion : 9=agarrar\n"
+		elif RR["lin_og"]%tl==10:rrinfo+="Funsion : 10=rebuscar\n"
 		if RR["lin_og"]>=tl:RR["lin_og"]=0
 	if "lin_o2" in RR:
-		var tl=11
+		var tl=12
 		if   RR["lin_o2"]%tl==0:rrinfo+="Funsion2: 0=ninguna\n"
 		elif RR["lin_o2"]%tl==1:rrinfo+="Funsion2: 1=mover\n"
 		elif RR["lin_o2"]%tl==2:rrinfo+="Funsion2: 2=orientar x\n"
@@ -255,6 +305,7 @@ func fmtg():                   # formato de tarjeta
 		elif RR["lin_o2"]%tl==8:rrinfo+="Funsion2: 8=recuperacion\n"
 		elif RR["lin_o2"]%tl==9:rrinfo+="Funsion2: 9=divagar\n"
 		elif RR["lin_o2"]%tl==10:rrinfo+="Funsion2: 10=agarrar\n"
+		elif RR["lin_o2"]%tl==11:rrinfo+="Funsion : 11=rebuscar\n"
 		if RR["lin_o2"]>=tl:RR["lin_o2"]=0
 	if "activv" in RR:
 		var tl=27
@@ -287,6 +338,7 @@ func fmtg():                   # formato de tarjeta
 		elif RR["activv"][0]%tl==25:RR["activv"][1]="Qa-5i"
 		elif RR["activv"][0]%tl==26:RR["activv"][1]="Qk-5i"
 		rrinfo+="Actibasion: "+RR["activv"][1]+"\n"
-func defn():                   # establese el nombre de un recurso
+func defn():                     # establese el nombre de un recurso
 	var m=resource_path.split("/")
 	resource_name=m[len(m)-1].split(".")[0]
+	rgtg(m[len(m)-1].split(".")[0])

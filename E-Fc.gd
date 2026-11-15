@@ -14,9 +14,14 @@
 
 @tool extends Node
 
-@export var est_ig:=""    ##estado en juego
-@export var ddd_tg:d_tg   ##targeta de pieza
-@export var aspect:Array[Node]##aspecto susedaneo al cuerpo
+@export var           est_ig:=""        ##estado en juego
+##etiquetas[br]
+##"c:>_" define inscripsion en la piesa[br]
+##"d:>_" define descripsion en la piesa[br]
+@export_multiline var etiggg:Array[String]
+@export var           ddd_tg:d_tg       ##targeta de pieza
+@export var           imagee:Texture    ##iagen de presentasion
+@export var           aspect:Array[Node]##aspecto susedaneo al cuerpo
 @export var RR:={}            ##extras
 @export var PT:Array[Node]    ##binculado
 var R:={"id":["fc",0]}
@@ -68,7 +73,11 @@ func _on_a_pressed() -> void:
 	if len(PT)>0:
 		var x=0;while x<len(PT[0].R["IV"]):
 			if PT[0].R["IV"][x]==$".":
-				PT[0].PT[0].R["Dm"][0]=x
-				EgLb.aspe(PT[0])
+				PT[0].ioenje.R["Dm"][0]=x
+				EgLb.aspe(PT[0],PT[0].R["IV"][x])
 				break
 			x+=1
+func _on_a_mouse_entered() -> void:
+	aspect[2].visible=true
+func _on_a_mouse_exited() -> void:
+	aspect[2].visible=false

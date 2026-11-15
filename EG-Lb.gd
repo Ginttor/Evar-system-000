@@ -114,28 +114,15 @@ func libr(r: String):           # crear libro
 		print("Archivo 'RR.json' creado en: " + (r+"/LB"))
 	else:
 		print("Carpeta 'LB' ya existe en: " + lb)
-func ordd(E):                   #ordenar targetas
+func ordd(E):                   # ordenar targetas
 	if len(E.ddd_tg)>0:
 		var l:Array[d_tg]=[E.ddd_tg[0]];var f="0AMEQRL"
 		for i in f:
 			var x=1
 			while x<len(E.ddd_tg):
-				if E.ddd_tg[x].tiprrh==i and len(l)<E.io_0SC["Sps"]:l.append(E.ddd_tg[x])
+				if E.ddd_tg[x].tiprrh==i and len(l)<E.RR["IV"]["Sps"]:l.append(E.ddd_tg[x])
 				x+=1
 		E.ddd_tg=l
-func camb(E):                   # cambio de mano
-	var po=false
-	for i in E.RR["IV"]["I"]:
-		if i.tiprrh=="0":po=true
-	var ck=EgLb.dado(0,len(E.RR["IV"]["I"]))
-	E.R["Dm"][0]=-1
-	while po and E.R["Dm"][0]==-1:
-		E.RR["IV"]["I"][ck].defn()
-		if E.RR["IV"]["I"][ck].tiprrh=="0":E.R["Dm"][0]=ck
-		ck=EgLb.dado(0,len(E.RR["IV"]["I"]))
-	if E.R["Dm"][0]!=-1:
-		print("ELEGIDO:",E.RR["IV"]["I"][E.R["Dm"][0]].resource_name)
-		EgLb.aspe(E.RR["Md"],null,"","iv")
 func lejs(r):                   # leer archibo json
 	var archivo = FileAccess.open(r, FileAccess.READ)
 	if archivo == null:
@@ -166,7 +153,7 @@ func barj(l):                   # baragear
 	return ll
 func atlz(E,x):                 # atlas
 	var ap=false
-	for i in E.enbolt[x].RR["imbext"]:
+	for i in E.ddd_tg[x].RR["imbext"]:
 		if   i==":0:":ap=true
 		elif i.split(":")[2]=="":
 			var e=0
@@ -178,23 +165,23 @@ func atlz(E,x):                 # atlas
 		elif i.split(":")[2]=="y":
 			ap=true
 			for e in E.RR["EV"]:
-				E.enbolt[x].defn()
-				if e.ddd_tg.resource_name==E.enbolt[x].resource_name:
+				E.ddd_tg[x].defn()
+				if e.ddd_tg.resource_name==E.ddd_tg[x].resource_name:
 					ap=false;break
 		elif i.split(":")[2]=="p":
 			for e in E.RR["EV"]:
 				if e.ddd_tg.resource_name==i.split(":")[0]:
 					ap=true;break
 	if ap:
-		E.enbolt[x].defn()
+		E.ddd_tg[x].defn()
 		var f=preload("res://Evar_system_000/rqs/eev.tscn").instantiate()
 		E.add_child.call_deferred(f)
 		var uv=EgLb.dado(0,len(E.puntuv))
-		f.ddd_tg=E.enbolt[x]
+		f.ddd_tg=E.ddd_tg[x]
 		f.PT.append(E);
 		E.RR["EV"].append(f)
 		EgLb.poci(f,uv,E)
-		print("(EVECTO):> ",E.enbolt[x].resource_name)
+		print("(EVECTO):> ",E.ddd_tg[x].resource_name)
 func stcM(E,l: int, e: bool):   # cambiar colision mask
 	if e:
 		E.collision_mask |= (1 << (l - 1))
@@ -206,75 +193,70 @@ func stcL(E,l: int, e: bool):   # cambiar colision layer
 	else:
 		E.collision_layer &= ~(1 << (l - 1))
 func poci(p,uv,E):              # posisionamiento de pieza
-	var xy=(E.puntuv[uv].split(";")[0].replace("(","").replace(")","")).split(",")
-	p.global_position.x=(int(xy[0])*E.escall.x)+E.global_position.x
-	p.global_position.y=(int(xy[1])*E.escall.y)+E.global_position.y
+	p.global_position=E.PT[uv].global_position
+	p.tablle=E
 func aspe(E,oj=null,t="",tx=""):# aspecto de la interfase
+	var x=0
 	#================================================================#foco
-	if t=="u" and E.ioenje:
-		E.ioenje.tablle=oj.RR["Tb"]
-		E.ioenje.global_position=oj.RR["MK"].global_position
-		#EgLb.bgls(E)
-	if E.ioenje and len(E.PT)>1 and E.ioenje.tablle and E.ioenje.tablle.focodc:
-		E.global_position=E.ioenje.tablle.focodc.global_position
-		E.ioenje.tablle.visible=true
-	#if "CT2" in R:R["CT2"].visible=false
-	
+	if oj:
+		E.R["CT"].visible=true
+		E.R["CT"].global_position=oj.global_position
+		if   oj.R["id"][0]=="pz":E.PT[E.R["A"]].aspect[0].texture=oj.imagee
+		elif oj.R["id"][0]=="fc":E.PT[E.R["A"]].aspect[0].texture=oj.aspect[0].texture
+		E.PT[E.R["A"]].PT[E.PT[E.R["A"]].R["a"]].play("on")
+	else:
+		E.R["CT"].visible=false
+		E.PT[E.R["A"]].aspect[0].texture=null
+		E.PT[E.R["A"]].PT[E.PT[E.R["A"]].R["a"]].play("of")
+
 	#================================================================#imbentario
-	var x=0;if E.ioenje:
-		while x<len(E.R["IV"]):
-			E.R["IV"][x].visible=false
-			E.R["IV"][x].aspect[0].texture=null
+	if E.ioenje and "IV" in E.ioenje.RR:
+		x=0;for i in E.R["IV"]:
+			i.visible=false
+			i.aspect[0].texture=null
+			i.aspect[1].visible=false
+			i.ddd_tg=null
+		if "Dm" in E.ioenje.R:#----------------------------------------------#mecanicas
+			if E.ioenje.R["Dm"][0]!=-1:#----------------------------------------------------------------------------------elejir
+				E.R["IV"][E.ioenje.R["Dm"][0]].aspect[1].visible=true
+			if (E.ioenje.R["Dm"][1]+1)*(E.ioenje.R["Dm"][0]+1)!=0 and E.ioenje.RR["IV"]["I"][E.ioenje.R["Dm"][0]]==null:#-mover
+				E.ioenje.RR["IV"]["I"][E.ioenje.R["Dm"][0]]=E.ioenje.RR["IV"]["I"][E.ioenje.R["Dm"][1]]
+				E.ioenje.RR["IV"]["K"][E.ioenje.R["Dm"][0]]=E.ioenje.RR["IV"]["K"][E.ioenje.R["Dm"][1]]
+				E.ioenje.RR["IV"]["D"][E.ioenje.R["Dm"][0]]=E.ioenje.RR["IV"]["D"][E.ioenje.R["Dm"][1]]
+				
+				E.ioenje.RR["IV"]["I"][E.ioenje.R["Dm"][1]]=null
+				E.ioenje.RR["IV"]["K"][E.ioenje.R["Dm"][1]]=""
+				E.ioenje.RR["IV"]["D"][E.ioenje.R["Dm"][1]]=""
+				
+				E.ioenje.R["Dm"]=[-1,-1]
+			E.ioenje.R["Dm"][1]=E.ioenje.R["Dm"][0]
+		while x<E.ioenje.RR["IV"]["Sps"] and len(E.ioenje.RR["IV"]["I"])>0:#-#aspecto de imbentario
+			E.R["IV"][x].visible=true
+			if E.ioenje.RR["IV"]["I"][x]:
+				E.R["IV"][x].ddd_tg=E.ioenje.RR["IV"]["I"][x]
+				E.R["IV"][x].aspect[0].texture=load(E.ioenje.RR["IV"]["I"][x].RR["imagen"])
+			#-----------------------
+			#if E.ioenje.R["lQ"][x]!=-1:
+			#	if E.ioenje.RR["IV"]["K"][E.ioenje.R["lQ"][x]]=="":
+			#		E.R["IV"][x].aspect[0].texture=load(E.ioenje.ddd_tg[E.ioenje.R["lQ"][x]].RR["imagen"])
+			#	else:
+			#		var y=0;while y<len(E.ioenje.ddd_tg[E.ioenje.R["lQ"][x]].Tar_Q_.rutass):
+			#			if E.ioenje.ddd_tg[E.ioenje.R["lQ"][x]].Tar_Q_.rutass[y].split(";")[2]==E.ioenje.RR["IV"]["K"][x]:
+			#				E.R["IV"][x].aspect[0].texture=E.ioenje.ddd_tg[E.ioenje.R["lQ"][x]].Tar_Q_.imlist[y]
+			#				break
+			#			y+=1
 			x+=1
-		x=1
-		if "i0" in E.ioenje.RR:
-			while x<len(E.ioenje.RR["i0"]):
-				E.R["IV"][x-1].visible=false
-				E.R["IV"][x-1].aspect[0].texture=null
-				E.R["IV"][x-1].aspect[0].texture=load(E.ioenje.RR["i0"][x].RR["imagen"])
-				E.R["IV"][x-1].visible=true
-				#-----------------------
-				#if E.ioenje.R["lQ"][x]!=-1:
-				#	if E.ioenje.RR["IV"]["K"][E.ioenje.R["lQ"][x]]=="":
-				#		E.R["IV"][x].aspect[0].texture=load(E.ioenje.ddd_tg[E.ioenje.R["lQ"][x]].RR["imagen"])
-				#	else:
-				#		var y=0;while y<len(E.ioenje.ddd_tg[E.ioenje.R["lQ"][x]].Tar_Q_.rutass):
-				#			if E.ioenje.ddd_tg[E.ioenje.R["lQ"][x]].Tar_Q_.rutass[y].split(";")[2]==E.ioenje.RR["IV"]["K"][x]:
-				#				E.R["IV"][x].aspect[0].texture=E.ioenje.ddd_tg[E.ioenje.R["lQ"][x]].Tar_Q_.imlist[y]
-				#				break
-				#			y+=1
-				x+=1
+		
 	#================================================================#inspeccionador
 	if "LSI" in E.R and E.ioenje:
 		x=0;for i in E.R["LSI"].PT:
 			i.text=""
-			if i.name.count("b") and E.ioenje:
-				if "kQ" in E.ioenje.R and len(E.ioenje.R["kQ"][2])<x:
-					i.text=E.ioenje.R["kQ"][2][x]
-					x+=1
-				else:i.visible=false
-		if E.ioenje and "Dm" in E.ioenje.R:
-			if E.ioenje.R["Dm"][0]!=-1:
-				E.R["LSI"].ioenje.text=E.ioenje.ddd_tg[E.ioenje.R["Dm"][0]].resource_name#====================================Nombre
-				E.R["LSI"].ioenje.tablle.text=E.ioenje.RR["IV"]["D"][E.ioenje.R["Dm"][0]]
-		if "kQ" in E.ioenje.R and E.ioenje.R["lQ"][E.ioenje.R["kQ"][0]]:E.R["LSI"].aspect[1].texture=E.ioenje.R["lQ"][E.ioenje.R["kQ"][0]].RR["imagen"]
-		if "kQ" in E.ioenje.R and E.ioenje.R["lQ"][E.ioenje.R["kQ"][1]]:E.R["LSI"].aspect[2].texture=E.ioenje.R["lQ"][E.ioenje.R["kQ"][1]].RR["imagen"]
-		if t=="n":
-			E.R["LSI"].ioenje.text=oj.name
-			E.R["LSI"].ioenje.text=EgLb.idio(R["LSI"].ioenje.text)
-		if t=="t":
-			E.R["LSI"].aspect[0].texture=load(oj.RR["imagen"])
-			E.R["LSI"].ioenje.text=oj.resource_name
-			E.R["LSI"].ioenje.text=EgLb.idio(R["LSI"].ioenje.text)
-			E.R["LSI"].ioenje.tablle.text=tx
-			E.R["LSI"].ioenje.tablle.text=EgLb.idio(R["LSI"].ioenje.tablle.text)
-		if "AC" in E.ioenje.R:
-			var a=0;x=3;while x<len(E.R["LSI"].PT):
-				if a<len(E.ioenje.R["AC"]):
-					E.R["LSI"].PT[x].visible=true
-					E.R["LSI"].PT[x].text=E.ioenje.R["AC"][a]
-					a+=1
-				x+=1
+		if oj and oj.R["id"][0]=="pz":
+			E.R["LSI"].PT[0].text=oj.ddd_tg[0].resource_name
+			if len(oj.etiggg)>0:for i in oj.etiggg:
+				if   i.count("d:>_")>0 and tx=="":E.R["LSI"].PT[1].text+=i+"\n"
+				elif i.count("c:>_")>0 and tx=="m":E.R["LSI"].PT[1].text+=i+"\n"
+
 	if "Md" in E.RR:
 		for i in E.RR["Md"].RR["TB"]:
 			i.visible=false
@@ -282,8 +264,9 @@ func aspe(E,oj=null,t="",tx=""):# aspecto de la interfase
 func cttb(E):                   # control de tableros
 	E.R["PS"]=[]
 	for e in E.mjugad:
-		for i in e.R["PS"]:
-			E.R["PS"].append(i)
+		if "PS" in e.R:
+			for i in e.R["PS"]:
+				E.R["PS"].append(i)
 func icpt(E):                   # inisio de carrga de partida
 	E.R["PS"]=[E.ioenje]
 	var x=2;while x<len(E.PT):
@@ -305,43 +288,48 @@ func icpt(E):                   # inisio de carrga de partida
 		if d[1]!="nt":EgLb.reuv(E.ES,d,E.ioenje)
 func miti(E,M,t):               # prosesamiento de mision
 	if !"SM" in E.R:E.R["SM"]=0#segimiento de mision
-	if M:
+	if M and "PS" in E.R:
 		M.defn()
 		var ct=0
 		var y=0;while y<len(M.RR["a_cheq"]) and t==M.RR["intchq"]:
 			for i in E.R["PS"]:#===========================#rebision de elemetos a chequear
-				if i:
-					for e in i.etiggg:
-						if e==M.RR["objchq"][y]:
-							if M.RR["a_cheq"][y]==0:
-								var x=0;while x <len(i.ddd_tg):
-									if i.ddd_tg[x] and i.ddd_tg[x].resource_name==M.RR["crcidn"][y]:
+				for e in i.etiggg:
+					if e.count(M.RR["objchq"][y])>0:
+						if   M.RR["a_cheq"][y]==0:#-----------------------+ todo en la Pz
+							var x=0;while x <len(i.ddd_tg):
+								if i.ddd_tg[x] and i.ddd_tg[x].resource_name==M.RR["crcidn"][y]:
+									ct+=1
+								x+=1
+						elif M.RR["a_cheq"][y]==1:#-----------------------+ la interaccion
+							var x=0;while x <len(i.R["II"]):
+								for o in i.R["II"][x].etiggg:
+									if o.count(M.RR["crcidn"][y])>0:
 										ct+=1
-									x+=1
-							#-------------------+
-							if M.RR["a_cheq"][y]==1:
-								var x=0;while x <len(i.R["II"]):
-									for o in i.R["II"][x].etiggg:
-										if o.count(M.RR["crcidn"][y])>0:
-											ct+=1
-									x+=1
-							#-------------------+
-							if M.RR["a_cheq"][y]==2 and len(i.R["II"])>0:#"iQ"
-								var tu=null
-								if i.R["II"][0].name=="P":tu=i.R["II"][0].ioenje
-								else:tu=i.R["II"][0]
-								var x=0;while x <len(tu.ddd_tg):
-									tu.ddd_tg[x].defn()
-									print("MS_iQ:",M.resource_name,tu.ddd_tg[x].resource_name,"==",M.RR["crcidn"][y])
-									if tu.ddd_tg[x] and tu.ddd_tg[x].resource_name==M.RR["crcidn"][y]:
+								x+=1
+						elif M.RR["a_cheq"][y]==2 and len(i.R["II"])>0:#--+ todo en la interaccion
+							var tu=null
+							if i.R["II"][0].name=="P":tu=i.R["II"][0].ioenje
+							else:tu=i.R["II"][0]
+							var x=0;while x <len(tu.RR["IV"]["I"]):
+								tu.RR["IV"]["I"][x].defn()
+								print("MS_iQ:",M.resource_name,tu.RR["IV"]["I"][x].resource_name,"==",M.RR["crcidn"][y])
+								if tu.RR["IV"]["I"][x] and tu.RR["IV"]["I"][x].resource_name==M.RR["crcidn"][y]:
+									ct+=1
+								x+=1
+						elif M.RR["a_cheq"][y]==3:#-----------------------+ en lo equipado
+							var x=0;while x <len(i.eqiped):
+								if i.eqiped[x]:
+									if i.eqiped[x].name==M.RR["crcidn"][y]:
 										ct+=1
-									x+=1
+								x+=1
 			##===========================#prosesar resultados
 			if ct>=M.RR["cntreq"][y]:
 				print("MS_micion cumplida:",M.resource_name)
 				if M.RR["trfcnd"][y]!="" and M.RR["trfcnd"][y]!="//Tg":
 					var x=0;while x<len(E.R["PS"]):
-						if E.R["PS"][x].ddd_tg and E.R["PS"][x].ddd_tg==load(M.RR["trfcnd"][y]):E.R["PS"][x].est_ig="0"
+						print("!!--:",E.R["PS"][x].name)
+						if E.R["PS"][x].ddd_tg[0] and E.R["PS"][x].ddd_tg[0]==load(M.RR["trfcnd"][y]):
+							E.R["PS"][x].est_ig="0"
 						x+=1
 				E.R["SM"]=0
 				if !("FM" in E.RR):
@@ -356,23 +344,14 @@ func miti(E,M,t):               # prosesamiento de mision
 	return ""
 func reuv(E,p,c=null):          # reuvicasion
 	var pz=""
-	if !c:
-		for i in E.pasodt:
-			if i.split(";")[0]==p.name:pz=i
-		pz=pz.split(";")
-	else:
-		var y=0;while y<len(E.tabler):
-			E.tabler[y].defn()
-			print("!--:",E.tabler[y].resource_name," -:- ",p[1])
-			if p[1].count(E.tabler[y].resource_name):break
-			y+=1
-		pz=["...",y,p[0]]
+	for i in E.pasodt:
+		if i.split(";")[0]==p.name:pz=i
+	pz=pz.split(";")
 	var tb=-1;var x=0
 	while x<len(E.RR["MM"]):
-		E.tabler[int(pz[1])].defn()
-		if E.RR["MM"][x].name.count(E.tabler[int(pz[1])].resource_name):tb=x
+		if str(E.RR["MM"][x]).count(E.tabler[int(pz[1])].resource_name):tb=x
 		x+=1
-	if tb==-1:
+	if tb==-1:#---poner tablero agregado
 		var f=E.tabler[int(pz[1])].instantiate()
 		add_child(f)
 		f.name=E.tabler[int(pz[1])].resource_name
@@ -384,12 +363,12 @@ func reuv(E,p,c=null):          # reuvicasion
 		x=0;while x<len(E.RR["MM"][tb].puntuv):
 			if E.RR["MM"][tb].puntuv[x].count(pz[2]):pz[2]=str(x);break
 			x+=1
-	if !c:EgLb.poci(p.R["II"][0],int(pz[2]), E.RR["MM"][tb])
-	else:EgLb.poci(c,int(pz[2]), E.RR["MM"][tb])
-	E.mjugad[0].PT[E.mjugad[0].R["aa"]].play("finTb")
-	E.mjugad[0].ioenje.tablle=E.RR["MM"][tb]
-	E.mjugad[0].R["PS"]=E.mjugad[0].R["PS"]+E.mjugad[0].ioenje.tablle.PT
-	EgLb.aspe(E.mjugad[0])
+	EgLb.poci(c,int(pz[2]), E.RR["MM"][tb])
+	E.mjugad[0].position = E.RR["MM"][tb].position
+	#E.mjugad[0].PT[E.mjugad[0].R["aa"]].play("finTb")
+	#E.mjugad[0].ioenje.tablle=E.RR["MM"][tb]
+	#E.mjugad[0].R["PS"]=E.mjugad[0].R["PS"]+E.mjugad[0].ioenje.tablle.PT
+	#EgLb.aspe(E.mjugad[0])
 func tigt(E) :                  # paso del tiempo
 	#================================================#flujo de tiempo y su medision
 	if !"ET" in E.R:E.R["ET"]=""
@@ -421,11 +400,11 @@ func tigt(E) :                  # paso del tiempo
 	if E.RR["TT"][1]>=E.RR["TL"][1] and "St" in R:R["St"]-=EgLb.dado(0,100,1)
 	var x=0;while x<6:
 		if E.RR["TT"][x]>E.RR["TL"][x]:E.RR["TT"][x]=0;E.RR["TT"][x+1]+=1
-		if E.RR["TT"][0]==1:
-			var y=0;while y<len(E.tablee):
-				E.tablee[y].accion["AC"]+=1
-				print("!!--:",E.tablee[y].accion["AC"])
-				y+=1
+		#if E.RR["TT"][0]==1:
+		#	var y=0;while y<len(E.PT):
+		#		E.PT[y].accion["AC"]+=1
+		#		print("!!--:",E.PT[y].accion["AC"])
+		#		y+=1
 		x+=1
 func alqm(k,e,r):               # alquimia
 	var y=0;while y<len(k):
@@ -435,51 +414,6 @@ func alqm(k,e,r):               # alquimia
 			break
 		y+=1
 	return [r,e]
-func pisz(E):                   # interaccion
-	if "II" in E.R and len(E.R["II"])>0 and E.R["II"][0].est_ig!="" and E.R["II"][0].ddd_tg:#comportamientoc
-		#E.R["II"][0].cpp()
-		if   E.R["II"][0].ddd_tg.RR["estrus"]==1:#-#Fruta
-			#if true:
-			#	EgLb.R["km"][3]+=1
-			var s=false;var x=0
-			if "IV" in E.RR and len(E.RR["IV"]["I"])<E.io_0SC["Sps"]:
-				while x<len(E.RR["IV"]["I"]):
-					if !E.RR["IV"]["I"][x]:
-						if !("kg" in E.R["II"][0].RR):E.R["II"][0].RR["kg"]=""
-						E.RR["IV"]["I"][x]=E.R["II"][0].ddd_tg
-						E.RR["IV"]["K"][x]=E.R["II"][0].RR["kg"]
-						s=true
-						break
-					x+=1
-				if !s:
-					E.R["II"][0].ddd_tg.defn()
-					E.RR["IV"]["I"].append(E.R["II"][0].ddd_tg)
-					if "kg" in E.R["II"][0].RR:E.RR["IV"]["K"].append(E.R["II"][0].RR["kg"])
-					else:E.RR["IV"]["K"].append("")
-					if "DS" in E.R["II"][0].RR:E.RR["IV"]["D"].append(E.R["II"][0].RR["DS"])
-					else:E.RR["IV"]["D"].append("")
-				E.R["II"][0].est_ig=""
-			EgLb.kdpk(E)
-		elif E.R["II"][0].ddd_tg.RR["estrus"]==4:#-#Interuptor
-			if E.R["II"][0].RR["AA"][".+i"]:
-				E.R["II"][0].PT[E.R["II"][0].R["a"]].play(E.R["II"][0].RR["AA"][".+i"].RR["acionn"])
-		elif E.R["II"][0].ddd_tg.RR["estrus"]==5:#-#Puesto
-			if E.R["II"][0].est_ig=="pz":
-				E.R["II"][0].R["II"].append(E)
-				E.R["II"][0].R["II"][0]=E
-				E.R["II"][0].est_ig="PZ"
-			#============================
-			if E.R["Dm"][0]>-1 and E.RR["IV"]["I"][E.R["Dm"][0]] and "IV" in E.R["II"][0].RR:
-				E.R["II"][0].RR["IV"]["I"].append(E.RR["IV"]["I"][E.R["Dm"][0]])
-				E.R["II"][0].RR["IV"]["K"].append(E.RR["IV"]["K"][E.R["Dm"][0]])
-				E.R["II"][0].RR["IV"]["D"].append(E.RR["IV"]["D"][E.R["Dm"][0]])
-				#E.R["II"][0].R["ak"]=EgLb.maca(E.R["II"][0])
-				E.RR["IV"]["I"].erase(E.RR["IV"]["I"][E.R["Dm"][0]])
-				E.RR["IV"]["K"].erase(E.RR["IV"]["K"][E.R["Dm"][0]])
-				E.RR["IV"]["D"].erase(E.RR["IV"]["D"][E.R["Dm"][0]])
-				E.R["Dm"][0]=-1;R["Dm"][0]=-1
-		EgLb.aspe(E.RR["Md"])
-		E.R["IK"]=100
 func dado(n,p,a=0):             # da un numero aleatorio
 	if zm<100000:zm+=3711
 	else:zm-=100000
@@ -514,6 +448,49 @@ func upup(i,t,m,d):             # actualizar uvicasion de personaje
 			break
 		x+=1
 	return x
+func rgst(c: Dictionary, d: String, n: String, k: String = "u") -> void:
+	# Crea la carpeta si no existe
+	if not DirAccess.dir_exists_absolute(d):
+		DirAccess.make_dir_recursive_absolute(d)
+
+	var ruta: String = d.path_join(n + ".json")
+	var datos: Dictionary = c
+
+	if k == "u" and FileAccess.file_exists(ruta):
+		# Modo actualizar: lee lo que ya hay y lo fusiona con "c"
+		var arch_lec := FileAccess.open(ruta, FileAccess.READ)
+		var texto: String = arch_lec.get_as_text()
+		arch_lec.close()
+
+		var json := JSON.new()
+		var err := json.parse(texto)
+		if err == OK and typeof(json.data) == TYPE_DICTIONARY:
+			var existente: Dictionary = json.data
+			#existente.merge(c, true)  # true = las claves nuevas sobrescriben las viejas
+			if "Pz" in existente and "Pz" in c:
+				existente["Pz"].merge(c["Pz"], true)
+				for i in existente["Pz"]:
+					if FileAccess.file_exists(i):
+						existente["Pz"].erase(i)
+			if "Tg" in existente and "Tg" in c:
+				existente["Tg"].merge(c["Tg"], true)
+				for i in existente["Tg"]:
+					if FileAccess.file_exists(i):existente["Tg"].erase(i)
+			if "cm" in existente and "cm" in c:
+				existente["cm"]=c["cm"]
+			datos = existente
+		else:
+			push_warning("rgst: JSON existente inválido en " + ruta + ", se sobrescribirá.")
+
+	# k == "s" (o cualquier valor distinto de "u") sobrescribe directo con "c"
+
+	var arch_esc := FileAccess.open(ruta, FileAccess.WRITE)
+	if arch_esc == null:
+		push_error("rgst: no se pudo crear/abrir el archivo en " + ruta)
+		return
+
+	arch_esc.store_string(JSON.stringify(datos, "\t"))
+	arch_esc.close()
 #=================================================#
 func _on_jp_pressed() -> void:
 	#LibBouk.RR["pe"]=RR["MP"][0]
@@ -629,7 +606,7 @@ func _on_p_pn_pressed() -> void:
 	var rr = JSON.parse_string(json_as_text)
 	if !"e" in R:R["e"]=0
 	R["e"]-=1
-	if R["e"]<0:R["e"]=len(rr["LPP"]-1)
+	if R["e"]<0:R["e"]=len(rr["LPP"])-1
 	file = rr["LPP"][R["e"]]
 	json_as_text = FileAccess.get_file_as_string(file)
 	var c = JSON.parse_string(json_as_text)

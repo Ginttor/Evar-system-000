@@ -15,15 +15,15 @@
 
 @tool extends Node
 
-
+@export var mapapp:Node            ##mapa al que pertenese
 @export var ioenje:Node   ##yo en el juego
 @export var commad:=[     ##comandos
+	"c",    #accionar
 	"up",   #arriba
 	"down", #abajo
 	"right",#derecha
 	"left", #isquierda
 	"esp",  #cloche
-	"c",    #accionar
 	]
 @export var mision:={  ##mision prinsipal
 	"ms":null,
@@ -34,8 +34,13 @@
 var R:={}
 
 func _ready() -> void:
-	if ioenje:ioenje.etiggg.append("Mn"+$".".name)
+	if ioenje and ioenje.etiggg.count("Mn"+$".".name)==0:
+		ioenje.etiggg.append("Mn"+$".".name)
+		ioenje.RR["Mn"]=$"."
+		print("IO:::",ioenje.name)
 	if Engine.is_editor_hint():
+		EgLb.R["cm"]=commad
+		EgLb.rgst(EgLb.R,"res://","RR")
 		if len(PT)>1:
 			if !"P-PI" in RR:RR["P-PI"]="//pp"
 		var x=0;while x<len(PT):
@@ -61,23 +66,24 @@ func _ready() -> void:
 			  "C-PM": "1;"
 			}
 		var x=0;while x<len(PT):
-				if   PT[x] and PT[x].name=="AA"         :R["a"] =x#animasione a ejecutar
-				elif PT[x] and PT[x].name=="INF"        :R["if"]=x#animasione a ejecutar
-				elif PT[x] and PT[x].name=="scl"        :R["sc"]=x#animasione a de siclo
-				elif PT[x] and PT[x].name=="ssIV"       :R["iv"] =x#sistema IV simple
-				elif PT[x] and PT[x].name=="ssA"        :R["A"] =x#sistema A simple
-				elif PT[x] and PT[x].name=="ind"        :R["CT"] =PT[x]#punto de comprobasion
-				elif PT[x] and PT[x].name=="ind2"       :R["CT2"]=PT[x]#sombtra de punto de comprobasion
-				elif PT[x] and PT[x].name=="LSI"        :R["LSI"]=PT[x];PT[x].RR["MD"]=$"."#lista de informasion
-				elif PT[x] and PT[x]==$".":R["CM"] = PT[x];R["P"]=[null,null,null,null,]#caramara asignada
-				elif PT[x] and PT[x].name=="p0":R["P"][0]= PT[x]##cartel de evento 0
-				elif PT[x] and PT[x].name=="p1":R["P"][1]= PT[x]##cartel de evento 1
-				elif PT[x] and PT[x].name=="p2":R["P"][2]= PT[x]##cartel de evento 2
-				elif PT[x] and PT[x].name=="p3":R["P"][3]= PT[x]##cartel de evento 3
-				elif PT[x] and PT[x].name.count("stk"):R["IV"].append(PT[x]);PT[x].PT.append($".")
+				if   PT[x] and PT[x].name=="AA"           :R["a"]=    x#animasione a ejecutar
+				elif PT[x] and PT[x].name=="INF"          :R["if"]=   x#animasione a ejecutar
+				elif PT[x] and PT[x].name=="scl"          :R["sc"]=   x#animasione a de siclo
+				elif PT[x] and PT[x].name=="ssIV"         :R["iv"]=   x#sistema IV simple
+				elif PT[x] and PT[x].name=="ssA"          :R["A"]=    x#sistema A simple
+				elif PT[x] and PT[x].name=="ind"          :R["CT"]=   PT[x]#punto de comprobasion
+				elif PT[x] and PT[x].name=="ind2"         :R["CT2"]=  PT[x]#sombtra de punto de comprobasion
+				elif PT[x] and PT[x].name=="LSI"          :R["LSI"]=  PT[x];PT[x].RR["MD"]=$"."#lista de informasion
+				elif PT[x] and PT[x]==$".":                R["CM"]=   PT[x];R["P"]=[null,null,null,null,]#caramara asignada
+				elif PT[x] and PT[x].name=="p0":           R["P"][0]= PT[x]##cartel de evento 0
+				elif PT[x] and PT[x].name=="p1":           R["P"][1]= PT[x]##cartel de evento 1
+				elif PT[x] and PT[x].name=="p2":           R["P"][2]= PT[x]##cartel de evento 2
+				elif PT[x] and PT[x].name=="p3":           R["P"][3]= PT[x]##cartel de evento 3
+				elif PT[x] and PT[x].name.count("stk"):    R["IV"].append(PT[x]);PT[x].PT.append($".")
 				x+=1
 		EgLb.aspe($".")
-		EgLb.icpt($".")
+		#EgLb.icpt($".")
+		EgLb.aspe($".",ioenje)
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		if mision["ms"]:
@@ -88,8 +94,9 @@ func _process(_delta: float) -> void:
 			R["P"][2].position.x=R["P"][0].position.x   ;R["P"][2].position.y=R["P"][0].position.y*-1
 			R["P"][3].position.x=R["P"][0].position.x*-1;R["P"][3].position.y=R["P"][0].position.y*-1
 	else:
+		if "if" in R:PT[R["if"]].text=ioenje.cllloz
 		if EgLb.cg=="G":
-			EgLb.icpt($".")
+			#EgLb.icpt($".")
 			EgLb.cg+="M"
 		if ioenje:
 			ilos(ioenje,commad)
@@ -99,7 +106,6 @@ func _process(_delta: float) -> void:
 			if r!="":
 				EgLb.catg(mision["wi"])
 			x+=1
-		focl($".")
 #========================
 func ilos(E,h):                 # hilos
 	var x=0
@@ -145,31 +151,9 @@ func ccam(E,P):                 # correccion de posision de camara
 			E.ioenje.velocity.x=0
 	if P.global_position.y>E.R["CM"].global_position.y+E.R["P"][0].position.y:E.R["CM"].global_position.y+=P.global_position.y-(E.R["CM"].global_position.y+E.R["P"][0].position.y)
 	if P.global_position.y<E.R["CM"].global_position.y-E.R["P"][0].position.y:E.R["CM"].global_position.y+=P.global_position.y-(E.R["CM"].global_position.y-E.R["P"][0].position.y)
-func focl(E):                   # focalizar
-	if "PS" in E.R:for i in E.R["PS"]:
-		if i and i.script!=null:
-			if i.R["id"][1]==1 and E.R["CT2"]:
-				E.R["CT2"].global_position=i.global_position
-				E.R["CT2"].visible=true
-				break
-			if i.R["id"][1]==2:
-				var d=false
-				if !("tL" in ioenje.R):ioenje.R["tL"]=[]#cercano
-				for e in ioenje.R["tL"]:if e==i:d=true
-				if !d:
-					ioenje.R["tL"].append(i)
-				ioenje.R["II"]=[len(ioenje.R["tL"])-1,"l"]
-				#ioenje.R["AC"]=EgLb.mete(ioenje,"l")
-				EgLb.aspe(ioenje.R["tL"][len(ioenje.R["tL"])-1],"n")
-				E.R["CT"].global_position=i.global_position
-				i.R["id"][1]=0;break
-	if ioenje and "CT" in E.R and "II" in ioenje.R:
-		if len(ioenje.R["II"])>0 and "i0" in ioenje.R["II"][0].RR:
-			E.R["CT"].visible=true
-			E.R["CT"].global_position=ioenje.R["II"][0].global_position
-			E.PT[E.R["A"]].aspect[0].texture=load(ioenje.R["II"][0].RR["i0"][0].RR["imagen"])
-			E.PT[E.R["A"]].PT[E.PT[E.R["A"]].R["a"]].play("on")
-		else:
-			E.R["CT"].visible=false
-			E.PT[E.R["A"]].aspect[0].texture=null
-			E.PT[E.R["A"]].PT[E.PT[E.R["A"]].R["a"]].play("of")
+func ajit():                    # ajustar interfase
+	if ioenje.ddd_tg[0].tiprrh=="0" and "IO" in ioenje.RR and "MK" in ioenje.RR and "IV" in ioenje.RR:
+		PT[R["a"]].play("0-IO-MK-IV")
+
+func _on_aa_animation_finished(anim_name: StringName) -> void:
+	if anim_name=="PSS":ajit()
